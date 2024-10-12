@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'configs/theme.dart';
 import 'main_screen.dart';
 
 void main() {
@@ -14,6 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gender Detect',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(color: Colors.transparent),
+        scaffoldBackgroundColor: neutral50,
         primarySwatch: Colors.blue,
         fontFamily: 'SFProDisplay',
       ),

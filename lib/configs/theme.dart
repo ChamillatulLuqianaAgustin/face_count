@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-const regularTS = TextStyle(
+const TextStyle regularTS = TextStyle(
   fontFamily: 'SFProDisplay',
   fontWeight: FontWeight.w400,
 );
-const mediumTS = TextStyle(
+const TextStyle mediumTS = TextStyle(
   fontFamily: 'SFProDisplay',
   fontWeight: FontWeight.w500,
 );
-const semiboldTS = TextStyle(
+const TextStyle semiboldTS = TextStyle(
   fontFamily: 'SFProDisplay',
   fontWeight: FontWeight.w600,
 );
-const boldTS = TextStyle(
+const TextStyle boldTS = TextStyle(
   fontFamily: 'SFProDisplay',
   fontWeight: FontWeight.w700,
 );
