@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
+// import 'package:face_count/features/acara/scan_pengunjung.dart';
 
 class DetailAcara extends StatefulWidget {
   const DetailAcara({super.key});
@@ -16,7 +18,7 @@ class _DetailAcaraState extends State<DetailAcara> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: neutral0),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -57,7 +59,7 @@ class _DetailAcaraState extends State<DetailAcara> {
                             'Seminar Nasional',
                             style: mediumTS.copyWith(
                               fontSize: 24,
-                              color: Colors.white,
+                              color: neutral0,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -65,15 +67,15 @@ class _DetailAcaraState extends State<DetailAcara> {
                             'Tips Belajar Machine Learning',
                             style: regularTS.copyWith(
                               fontSize: 16,
-                              color: Colors.white70,
+                              color: neutral300,
                             ),
                           ),
                         ],
                       ),
                       const Spacer(),
-                      const Icon(Icons.edit, color: Colors.white),
+                      const Icon(Icons.edit, color: neutral0),
                       const SizedBox(width: 12),
-                      const Icon(Icons.delete, color: Colors.white),
+                      const Icon(Icons.delete, color: neutral0),
                     ],
                   ),
                 ),
@@ -84,7 +86,7 @@ class _DetailAcaraState extends State<DetailAcara> {
                 Expanded(
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: neutral0,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(12),
                       ),
@@ -186,16 +188,18 @@ class _DetailAcaraState extends State<DetailAcara> {
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
-        color: Colors.white,
+        color: neutral0,
         child: ElevatedButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.camera_alt, color: Colors.white),
+          onPressed: () async {
+            await ImagePicker().pickImage(source: ImageSource.camera);
+          },
+          icon: const Icon(Icons.camera_alt, color: neutral0),
           label: Text(
             'Scan Pengunjung',
-            style: regularTS.copyWith(color: Colors.white),
+            style: regularTS.copyWith(color: neutral0),
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: primaryBase,
             minimumSize: const Size(double.infinity, 48),
           ),
         ),
