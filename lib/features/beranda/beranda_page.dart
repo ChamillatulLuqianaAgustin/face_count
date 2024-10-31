@@ -1,5 +1,7 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/acara/detail_acara.dart';
 import 'package:flutter/material.dart';
+// import '../acara/detail_acara.dart';
 
 import 'widgets/acara_beranda_card.dart';
 
@@ -97,6 +99,11 @@ class BerandaPage extends StatelessWidget {
                   status: 'Berlangsung',
                   time: '08.00 - 12.00',
                   place: 'Auditorium Lt. 8',
+                  onPressed : (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const DetailAcara(),)
+                    );
+                  },
                 ),
                 const SizedBox(height: 8),
                 AcaraBerandaCard(
@@ -120,4 +127,5 @@ class BerandaPage extends StatelessWidget {
             ),
     );
   }
+  
 }
