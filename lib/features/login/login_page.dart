@@ -95,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 20),
 
-              // Bagian Tombol Login
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -120,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 20),
 
-              // Tombol untuk Navigasi ke Halaman Daftar
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
