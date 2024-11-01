@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     const BerandaPage(),
     const KalenderPage(),
     const RiwayatPage(),
-    const ProfilPage(),
+    const ProfilScreen(),
   ];
 
   @override
