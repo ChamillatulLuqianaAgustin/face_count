@@ -1,4 +1,4 @@
-package com.example.face_count
+package com.facecount.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362516628357",
+    "project_id": "facecount-ti3e",
+    "storage_bucket": "facecount-ti3e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362516628357:android:d97b0f8f5fd3ae17b3baec",
+        "android_client_info": {
+          "package_name": "com.facecount.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPqC-gU_BJrWQZqnxrQFbOm1eihm-Twfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

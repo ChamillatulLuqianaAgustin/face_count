@@ -3,9 +3,11 @@ import 'package:face_count/widgets/custom_button.dart';
 import '../../configs/theme.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/dummy_textfield.dart';
+// import '../model/acara.dart';
 
 class TambahAcara extends StatefulWidget {
   final bool isEditMode;
+  // final Acara acara;
 
   const TambahAcara({super.key, this.isEditMode = false});
 

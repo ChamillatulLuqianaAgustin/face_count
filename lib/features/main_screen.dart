@@ -1,11 +1,11 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'features/acara/tambah_acara.dart';
-import 'features/beranda/beranda_page.dart';
-import 'features/kalender/kalender_page.dart';
-import 'features/profil/profil_page.dart';
-import 'features/riwayat/riwayat_page.dart';
+import 'acara/tambah_acara.dart';
+import 'beranda/beranda_page.dart';
+import 'kalender/kalender_page.dart';
+import 'profil/profil_page.dart';
+import 'riwayat/riwayat_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
