@@ -6,6 +6,7 @@ import 'features/beranda/beranda_page.dart';
 import 'features/kalender/kalender_page.dart';
 import 'features/profil/profil_page.dart';
 import 'features/riwayat/riwayat_page.dart';
+import 'features/login/login_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -22,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     const BerandaPage(),
     const KalenderPage(),
     const RiwayatPage(),
-    const ProfilPage(),
+    const ProfilScreen(),
   ];
 
   @override
