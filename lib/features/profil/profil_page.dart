@@ -1,5 +1,8 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../auth/cubit/auth_cubit.dart';
 
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
@@ -35,8 +38,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
               children: [
                 const CircleAvatar(
                   radius: 35,
-                  backgroundImage:
-                      NetworkImage('https://via.placeholder.com/150'),
+                  // backgroundImage:
+                  //     NetworkImage('https://via.placeholder.com/150'),
                 ),
                 const SizedBox(width: 16),
                 Column(
@@ -75,20 +78,19 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 // Action for "Ubah Password"
               },
             ),
-            const ListTile(
-              leading: Icon(Icons.logout, color: Colors.red),
-              title: Text(
+            ListTile(
+              onTap: () {
+                context.read<AuthCubit>().logout();
+              },
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
                 'Log Out',
                 style: TextStyle(color: Colors.red),
               ),
-              // onTap: () {
-              //   // Action for "Log Out"
-              // },
             ),
           ],
         ),
       ),
-     
     );
   }
 }

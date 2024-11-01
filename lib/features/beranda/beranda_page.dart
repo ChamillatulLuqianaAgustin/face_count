@@ -1,5 +1,6 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import '../acara/detail_acara.dart';
 
@@ -10,6 +11,7 @@ class BerandaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     final isEventEmpty = false;
 
     return Scaffold(
@@ -38,7 +40,7 @@ class BerandaPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Ravi Wimar',
+                    user!.displayName.toString(),
                     style: mediumTS.copyWith(fontSize: 16),
 
                     // Max Line of Name is 1, if overflow then make it "Ravi Wimar..."
@@ -99,10 +101,10 @@ class BerandaPage extends StatelessWidget {
                   status: 'Berlangsung',
                   time: '08.00 - 12.00',
                   place: 'Auditorium Lt. 8',
-                  onPressed : (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const DetailAcara(),)
-                    );
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DetailAcara(),
+                    ));
                   },
                 ),
                 const SizedBox(height: 8),
@@ -127,5 +129,4 @@ class BerandaPage extends StatelessWidget {
             ),
     );
   }
-  
 }
