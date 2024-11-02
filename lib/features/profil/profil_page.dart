@@ -1,4 +1,5 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/profil/change_password.dart';
 import 'package:face_count/features/profil/edit_profile.dart';
 import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -105,22 +106,30 @@ class _ProfilScreenState extends State<ProfilScreen> {
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(Icons.lock_outline_rounded),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Text(
-                        'Ubah Password',
-                        style:
-                            mediumTS.copyWith(fontSize: 16, color: neutral950),
-                      ),
-                      Spacer(),
-                      Image.asset('assets/icons/arrow_right.png')
-                    ],
+                InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ChangePassword(),
+                    ));
+                  },
+                  child: Ink(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Icon(Icons.lock_outline_rounded),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          'Ubah Password',
+                          style: mediumTS.copyWith(
+                              fontSize: 16, color: neutral950),
+                        ),
+                        Spacer(),
+                        Image.asset('assets/icons/arrow_right.png')
+                      ],
+                    ),
                   ),
                 ),
                 Divider(
