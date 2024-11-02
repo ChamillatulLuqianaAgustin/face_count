@@ -1,4 +1,6 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/profil/edit_profile.dart';
+import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,78 +20,139 @@ class _ProfilScreenState extends State<ProfilScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Profil',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
+          style: mediumTS.copyWith(fontSize: 20, color: neutral950),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: neutral0,
+            ),
+            child: Row(
               children: [
                 const CircleAvatar(
-                  radius: 35,
-                  // backgroundImage:
-                  //     NetworkImage('https://via.placeholder.com/150'),
+                  radius: 24,
+                  backgroundColor: yellow50,
+                  backgroundImage: AssetImage('assets/images/memoji.png'),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(
+                  width: 10,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'Ravi Wimar',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: mediumTS.copyWith(fontSize: 16, color: neutral950),
                     ),
                     Text(
                       'raviwm@gmail.com',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
+                      style: regularTS.copyWith(color: neutral400),
+                    )
                   ],
                 ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  onPressed: () {
-                    // Action for edit button
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const EditProfile(),
+                    ));
                   },
-                ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 19),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(200),
+                      color: primaryBase,
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icons/edit.png',
+                          color: neutral0,
+                          width: 24,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'Edit',
+                          style:
+                              mediumTS.copyWith(fontSize: 16, color: neutral0),
+                        )
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-            const SizedBox(height: 40),
-            ListTile(
-              leading: const Icon(Icons.lock_outline),
-              title: const Text('Ubah Password'),
-              onTap: () {
-                // Action for "Ubah Password"
-              },
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: neutral0,
             ),
-            ListTile(
-              onTap: () {
-                context.read<AuthCubit>().logout();
-              },
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text(
-                'Log Out',
-                style: TextStyle(color: Colors.red),
-              ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(Icons.lock_outline_rounded),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        'Ubah Password',
+                        style:
+                            mediumTS.copyWith(fontSize: 16, color: neutral950),
+                      ),
+                      Spacer(),
+                      Image.asset('assets/icons/arrow_right.png')
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: neutral50,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/icons/exit.png',
+                        color: redBase,
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        'Log Out',
+                        style: mediumTS.copyWith(fontSize: 16, color: redBase),
+                      ),
+                      Spacer(),
+                      Image.asset(
+                        'assets/icons/arrow_right.png',
+                        color: redBase,
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
