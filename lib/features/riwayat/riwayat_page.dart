@@ -1,3 +1,4 @@
+import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:face_count/features/riwayat/widgets/tab_bar.dart';
 import 'package:face_count/features/riwayat/widgets/tab_bar_item.dart';
@@ -18,12 +19,15 @@ class _RiwayatPageState extends State<RiwayatPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.grey[100],
-          title: const Text(
+          title: Text(
             'Riwayat',
-            style: TextStyle(fontWeight: FontWeight.w500),
+            style: mediumTS.copyWith(
+              fontSize: 20,
+              color: neutral950,
+            ),
           ),
         ),
         body: Stack(
@@ -40,35 +44,6 @@ class _RiwayatPageState extends State<RiwayatPage> {
                 Center(child: Text('3')),
               ],
             ),
-            TopTabBar(
-                items: [
-                  TabBarItem(
-                    index: 0,
-                    isSelected: selectedPage == 0,
-                    title: 'Hari ini',
-                    width: 72,
-                  ),
-                  TabBarItem(
-                    index: 1,
-                    isSelected: selectedPage == 1,
-                    title: 'Seminggu terakhir',
-                    width: 128,
-                  ),
-                  TabBarItem(
-                    index: 2,
-                    isSelected: selectedPage == 2,
-                    title: 'Sebulan terakhir',
-                    width: 116,
-                  ),
-                ],
-                onTap: (index) {
-                  selectedPage = index;
-
-                  pageController.animateToPage(selectedPage,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut);
-                },
-                selectedIndex: 0)
           ],
         ),
       ),

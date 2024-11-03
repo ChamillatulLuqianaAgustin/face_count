@@ -1,3 +1,4 @@
+import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
 
 class CardCustom extends StatelessWidget {
@@ -8,11 +9,9 @@ class CardCustom extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      width: double.infinity,
-      height: 220,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
+        color: neutral0,
       ),
       child: Column(
         children: [
@@ -21,28 +20,40 @@ class CardCustom extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Seminar Nasional',
-                      style: TextStyle(fontWeight: FontWeight.w700),
+                      style: mediumTS.copyWith(
+                        fontSize: 16,
+                        color: neutral950,
+                      ),
                     ),
-                    Text('Tips Belajar Machine Learning'),
+                    Text(
+                      'Tips Belajar Machine Learning',
+                      style: regularTS.copyWith(
+                        color: neutral300,
+                      ),
+                    ),
                   ],
                 ),
                 Container(
-                  width: 60,
-                  height: 24,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.blue[100],
+                    color: primary100,
                     borderRadius: BorderRadius.circular(40),
                   ),
-                  child: const Align(
+                  child: Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Selesai',
-                      style: TextStyle(color: Colors.blue),
+                      style: regularTS.copyWith(
+                        color: primaryBase,
+                      ),
                     ),
                   ),
                 ),
@@ -62,26 +73,42 @@ class CardCustom extends StatelessWidget {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Hari'),
+                      Text(
+                        'Hari',
+                        style: regularTS.copyWith(
+                          color: neutral400,
+                        ),
+                      ),
                       Text(
                         'Selasa, 25 Sep 2023',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: regularTS.copyWith(
+                          fontSize: 16,
+                          color: neutral950,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2 - 64,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Waktu'),
+                      Text(
+                        'Waktu',
+                        style: regularTS.copyWith(
+                          color: neutral400,
+                        ),
+                      ),
                       Text(
                         '06.00 - 10.00',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: regularTS.copyWith(
+                          fontSize: 16,
+                          color: neutral950,
+                        ),
                       ),
                     ],
                   ),
@@ -98,26 +125,42 @@ class CardCustom extends StatelessWidget {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Tempat'),
+                      Text(
+                        'Tempat',
+                        style: regularTS.copyWith(
+                          color: neutral400,
+                        ),
+                      ),
                       Text(
                         'Auditorium lt. 8',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: regularTS.copyWith(
+                          fontSize: 16,
+                          color: neutral950,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2 - 64,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Peserta'),
+                      Text(
+                        'Peserta',
+                        style: regularTS.copyWith(
+                          color: neutral400,
+                        ),
+                      ),
                       Text(
                         '100 orang',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: regularTS.copyWith(
+                          fontSize: 16,
+                          color: neutral950,
+                        ),
                       ),
                     ],
                   ),

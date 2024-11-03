@@ -14,12 +14,12 @@ class ListCard extends StatelessWidget {
       },
       itemCount: 10,
       itemBuilder: (context, index) {
-        if (index == 0) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 60),
-            child: CardCustom(),
-          );
-        }
+        // if (index == 0) {
+        //   return const Padding(
+        //     padding: EdgeInsets.only(top: 60),
+        //     child: CardCustom(),
+        //   );
+        // }
         return const CardCustom();
       },
     );
