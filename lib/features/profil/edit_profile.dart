@@ -1,4 +1,5 @@
 import 'package:face_count/widgets/custom_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
@@ -16,6 +17,9 @@ class _EditProfileState extends State<EditProfile> {
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser;
+  final isEventEmpty = false;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +77,7 @@ class _EditProfileState extends State<EditProfile> {
                 CustomTextField(
                   controller: _namaController,
                   label: 'Nama',
-                  hint: 'Ravi Wimar',
+                  hint: user!.displayName.toString(),
                 ),
                 const SizedBox(
                   height: 16,
@@ -81,7 +85,7 @@ class _EditProfileState extends State<EditProfile> {
                 CustomTextField(
                   controller: _emailController,
                   label: 'Email',
-                  hint: 'raviwm@gmail.com',
+                  hint: user!.email.toString(),
                 ),
                 const SizedBox(
                   height: 16,
@@ -89,7 +93,7 @@ class _EditProfileState extends State<EditProfile> {
                 CustomTextField(
                   controller: _phoneController,
                   label: 'Nomor Handphone',
-                  hint: '08123456789',
+                  hint: user!.phoneNumber.toString(),
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/profil/change_password.dart';
 import 'package:face_count/features/profil/edit_profile.dart';
 import 'package:face_count/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,8 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreenState extends State<ProfilScreen> {
   final _formKey = GlobalKey<FormState>();
+  final user = FirebaseAuth.instance.currentUser;
+  final isEventEmpty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +55,11 @@ class _ProfilScreenState extends State<ProfilScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Ravi Wimar',
+                      user!.displayName.toString(),
                       style: mediumTS.copyWith(fontSize: 16, color: neutral950),
                     ),
                     Text(
-                      'raviwm@gmail.com',
+                      user!.email.toString(),
                       style: regularTS.copyWith(color: neutral400),
                     )
                   ],
