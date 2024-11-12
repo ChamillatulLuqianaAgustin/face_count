@@ -1,18 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import '../acara/detail_acara.dart';
 
+import '../auth/cubit/acara_cubit.dart';
+import '../auth/cubit/acara_state.dart';
 import 'widgets/acara_beranda_card.dart';
 
-class BerandaPage extends StatelessWidget {
+class BerandaPage extends StatefulWidget {
   const BerandaPage({super.key});
+
+  @override
+  State<BerandaPage> createState() => _BerandaPageState();
+}
+
+class _BerandaPageState extends State<BerandaPage> {
+  @override
+  void initState() {
+    context.read<AcaraCubit>().fetchAcara();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final isEventEmpty = false;
 
     return Scaffold(
       // Appbar
@@ -69,24 +83,28 @@ class BerandaPage extends StatelessWidget {
           ),
         ],
       ),
-      body: isEventEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/no_event.png'),
-                  Text(
-                    'Belum ada event yang tercatat.',
-                    style: mediumTS.copyWith(fontSize: 20),
-                  ),
-                  const Text(
-                    'Tambahkan event pertama kamu sekarang!',
-                    style: regularTS,
-                  )
-                ],
-              ),
-            )
-          : ListView(
+      body: BlocBuilder<AcaraCubit, AcaraState>(
+        builder: (context, state) {
+          if (state is AcaraLoaded) {
+            if (state.acaraList.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/no_event.png'),
+                    Text(
+                      'Belum ada event yang tercatat.',
+                      style: mediumTS.copyWith(fontSize: 20),
+                    ),
+                    const Text(
+                      'Tambahkan event pertama kamu sekarang!',
+                      style: regularTS,
+                    )
+                  ],
+                ),
+              );
+            }
+            return ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 Text(
@@ -94,39 +112,62 @@ class BerandaPage extends StatelessWidget {
                   style: regularTS.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 8),
-                AcaraBerandaCard(
-                  leftColor: purple950,
-                  rightColor: purpleBase,
-                  title: 'Seminar Nasional',
-                  status: 'Berlangsung',
-                  time: '08.00 - 12.00',
-                  place: 'Auditorium Lt. 8',
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const DetailAcara(),
-                    ));
+                ...state.acaraList.map(
+                  (acara) {
+                    return AcaraBerandaCard(
+                      leftColor: purple950,
+                      rightColor: purpleBase,
+                      acaraModel: acara,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DetailAcara(
+                              acara: acara,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
-                ),
-                const SizedBox(height: 8),
-                AcaraBerandaCard(
-                  leftColor: red950,
-                  rightColor: redBase,
-                  title: 'Kuliah Tamu',
-                  status: 'Berlangsung',
-                  time: '08.00 - 12.00',
-                  place: 'Auditorium Lt. 8',
-                ),
-                const SizedBox(height: 8),
-                AcaraBerandaCard(
-                  leftColor: primary950,
-                  rightColor: primaryBase,
-                  title: 'Workshop',
-                  status: 'Berlangsung',
-                  time: '08.00 - 12.00',
-                  place: 'Auditorium Lt. 8',
-                ),
+                )
+                // AcaraBerandaCard(
+                //   leftColor: purple950,
+                //   rightColor: purpleBase,
+                //   title: 'Seminar Nasional',
+                //   status: 'Berlangsung',
+                //   time: '08.00 - 12.00',
+                //   place: 'Auditorium Lt. 8',
+                //   onPressed: () {
+                //     Navigator.of(context).push(MaterialPageRoute(
+                //       builder: (context) => const DetailAcara(),
+                //     ));
+                //   },
+                // ),
+                // const SizedBox(height: 8),
+                // AcaraBerandaCard(
+                //   leftColor: red950,
+                //   rightColor: redBase,
+                //   title: 'Kuliah Tamu',
+                //   status: 'Berlangsung',
+                //   time: '08.00 - 12.00',
+                //   place: 'Auditorium Lt. 8',
+                // ),
+                // const SizedBox(height: 8),
+                // AcaraBerandaCard(
+                //   leftColor: primary950,
+                //   rightColor: primaryBase,
+                //   title: 'Workshop',
+                //   status: 'Berlangsung',
+                //   time: '08.00 - 12.00',
+                //   place: 'Auditorium Lt. 8',
+                // ),
               ],
-            ),
+            );
+          }
+          print('gagal ambil data');
+          return Container();
+        },
+      ),
     );
   }
 }

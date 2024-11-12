@@ -1,10 +1,18 @@
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/models/acara_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
 
 class DetailAcara extends StatefulWidget {
-  const DetailAcara({super.key});
+  final AcaraModel acara;
+  const DetailAcara({
+    super.key,
+    required this.acara,
+  });
 
   @override
   State<DetailAcara> createState() => _DetailAcaraState();
@@ -42,147 +50,155 @@ class _DetailAcaraState extends State<DetailAcara> {
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 70),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Title Section
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          BlocBuilder<AcaraCubit, AcaraState>(
+            builder: (context, state) {
+              return Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // Title Section
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
                         children: [
-                          Text(
-                            'Seminar Nasional',
-                            style: mediumTS.copyWith(
-                              fontSize: 24,
-                              color: neutral0,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Tips Belajar Machine Learning',
-                            style: regularTS.copyWith(
-                              fontSize: 16,
-                              color: neutral300,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.edit, color: neutral0),
-                      const SizedBox(width: 12),
-                      const Icon(Icons.delete, color: neutral0),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 32),
-
-                // Event Details
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: neutral0,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(12),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        )
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Detail Acara',
-                            style: regularTS.copyWith(
-                              fontSize: 18,
-                              color: neutral950,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: neutral50,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: neutral100,
-                                strokeAlign: BorderSide.strokeAlignOutside,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.acara.nama_acara.toString(),
+                                style: mediumTS.copyWith(
+                                  fontSize: 24,
+                                  color: neutral0,
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              children: ListTile.divideTiles(
-                                context: context,
-                                color: neutral100,
-                                tiles: [
-                                  ListTile(
-                                    leading: const Icon(Icons.event),
-                                    title: const Text('Selasa, 16 Sep 2024'),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.access_time),
-                                    title: const Text('08:00 - 12:00'),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.place),
-                                    title: const Text('Auditorium Lt.8'),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.people),
-                                    title: const Text('120 orang'),
-                                  ),
-                                ],
-                              ).toList(),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Text('Jumlah Pengunjung',
-                              style: regularTS.copyWith(
-                                  fontSize: 18, color: Colors.black87)),
-                          const SizedBox(height: 16),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: neutral50,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: neutral100,
-                                strokeAlign: BorderSide.strokeAlignOutside,
+                              const SizedBox(height: 2),
+                              Text(
+                                widget.acara.desc_acara.toString(),
+                                style: regularTS.copyWith(
+                                  fontSize: 16,
+                                  color: neutral300,
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              children: ListTile.divideTiles(
-                                context: context,
-                                color: neutral100,
-                                tiles: [
-                                  ListTile(
-                                    leading: const Icon(Icons.male),
-                                    title: const Text('70 orang'),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.female),
-                                    title: const Text('30 orang'),
-                                  ),
-                                ],
-                              ).toList(),
-                            ),
+                            ],
                           ),
+                          const Spacer(),
+                          const Icon(Icons.edit, color: neutral0),
+                          const SizedBox(width: 12),
+                          const Icon(Icons.delete, color: neutral0),
                         ],
                       ),
                     ),
-                  ),
+
+                    const SizedBox(height: 32),
+
+                    // Event Details
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: neutral0,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Detail Acara',
+                                style: regularTS.copyWith(
+                                  fontSize: 18,
+                                  color: neutral950,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: neutral50,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: neutral100,
+                                    strokeAlign: BorderSide.strokeAlignOutside,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: ListTile.divideTiles(
+                                    context: context,
+                                    color: neutral100,
+                                    tiles: [
+                                      ListTile(
+                                        leading: const Icon(Icons.event),
+                                        title: Text(widget.acara.tanggal_acara
+                                            .toString()),
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.access_time),
+                                        title: Text(
+                                            '${widget.acara.waktu_mulai}:00 - ${widget.acara.waktu_selesai}:00'),
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.place),
+                                        title: Text(widget.acara.tempat_acara
+                                            .toString()),
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.people),
+                                        title: Text(
+                                            '${widget.acara.jumlah_partisipan} orang'),
+                                      ),
+                                    ],
+                                  ).toList(),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              Text('Jumlah Pengunjung',
+                                  style: regularTS.copyWith(
+                                      fontSize: 18, color: Colors.black87)),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: neutral50,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: neutral100,
+                                    strokeAlign: BorderSide.strokeAlignOutside,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: ListTile.divideTiles(
+                                    context: context,
+                                    color: neutral100,
+                                    tiles: [
+                                      ListTile(
+                                        leading: const Icon(Icons.male),
+                                        title: const Text('70 orang'),
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.female),
+                                        title: const Text('30 orang'),
+                                      ),
+                                    ],
+                                  ).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),

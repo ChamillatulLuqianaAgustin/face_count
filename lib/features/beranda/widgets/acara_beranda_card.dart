@@ -1,24 +1,19 @@
   import 'package:flutter/material.dart';
 
   import '../../../configs/theme.dart';
+import '../../../models/acara_model.dart';
 
   class AcaraBerandaCard extends StatelessWidget {
     final Color leftColor;
     final Color rightColor;
-    final String title;
-    final String status;
-    final String time;
-    final String place;
+final AcaraModel acaraModel;
     final VoidCallback? onPressed;
 
     const AcaraBerandaCard({
       super.key,
       required this.leftColor,
       required this.rightColor,
-      required this.title,
-      required this.status,
-      required this.time,
-      required this.place,
+      required this.acaraModel,
       this.onPressed
     });
 
@@ -26,6 +21,7 @@
     Widget build(BuildContext context) {
       return InkWell(onTap: onPressed, // Trigger the onPressed callback
       child: Container(
+        margin: EdgeInsets.only(bottom: 8),
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
@@ -43,7 +39,7 @@
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    acaraModel.nama_acara.toString(),
                     style: regularTS.copyWith(
                       fontSize: 24,
                       color: neutral0,
@@ -60,7 +56,10 @@
                       border: Border.all(color: neutral100),
                     ),
                     child: Text(
-                      status,
+                      (acaraModel.tanggal_acara ?? DateTime.now())
+                              .isAfter(DateTime.now())
+                          ? 'Akan Datang'
+                          : 'Selesai',
                       style: regularTS.copyWith(
                         fontSize: 10,
                         color: neutral100,
@@ -77,7 +76,7 @@
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        time,
+                        '${acaraModel.waktu_mulai}.00 - ${acaraModel.waktu_selesai}.00',
                         style: regularTS.copyWith(
                           fontSize: 12,
                           color: neutral100,
@@ -95,7 +94,7 @@
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        place,
+                        acaraModel.tempat_acara.toString(),
                         style: regularTS.copyWith(
                           fontSize: 12,
                           color: neutral100,

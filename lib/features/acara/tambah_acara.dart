@@ -1,5 +1,11 @@
+import 'dart:math';
+
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/models/acara_model.dart';
 import 'package:flutter/material.dart';
 import 'package:face_count/widgets/custom_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../configs/theme.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/dummy_textfield.dart';
@@ -17,8 +23,8 @@ class TambahAcara extends StatefulWidget {
 
 class _TambahAcaraState extends State<TambahAcara> {
   final _namaAcaraController = TextEditingController();
-  final _deskripsiController = TextEditingController();
-  final _tempatController = TextEditingController();
+  final _descAcaraController = TextEditingController();
+  final _tempatAcaraController = TextEditingController();
   final _jumlahPartisipanController = TextEditingController();
 
   DateTime? _selectedDate;
@@ -27,72 +33,94 @@ class _TambahAcaraState extends State<TambahAcara> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const ImageIcon(AssetImage('assets/icons/arrow_back.png')),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        titleSpacing: 0,
-        title: Text(
-          widget.isEditMode ? 'Edit Acara' : 'Tambah Acara',
-          style: mediumTS.copyWith(fontSize: 20),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
+    return BlocConsumer<AcaraCubit, AcaraState>(
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is AddAcaraSuccess) {
+          Navigator.of(context).pop();
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const ImageIcon(AssetImage('assets/icons/arrow_back.png')),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            child: Column(
-              children: [
-                CustomTextField(
-                  controller: _namaAcaraController,
-                  label: 'Nama Acara',
-                  hint: 'Masukkan nama acara',
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _deskripsiController,
-                  label: 'Deskripsi Singkat',
-                  hint: 'Masukkan deskripsi acara',
-                ),
-                const SizedBox(height: 16),
-                _buildTimePicker(),
-                const SizedBox(height: 16),
-                _buildDatePicker(),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _tempatController,
-                  label: 'Tempat',
-                  hint: 'Masukkan tempat',
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _jumlahPartisipanController,
-                  keyboardType: TextInputType.number,
-                  label: 'Jumlah Partisipan',
-                  hint: 'Masukkan jumlah partisipan',
-                ),
-              ],
+            titleSpacing: 0,
+            title: Text(
+              widget.isEditMode ? 'Edit Acara' : 'Tambah Acara',
+              style: mediumTS.copyWith(fontSize: 20),
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-        color: neutral0,
-        child: CustomButton(
-          text: widget.isEditMode ? 'Simpan' : 'Buat',
-          onTap: () {
-            // Add your logic here
-          },
-        ),
-      ),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: _namaAcaraController,
+                      label: 'Nama Acara',
+                      hint: 'Masukkan nama acara',
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      controller: _descAcaraController,
+                      label: 'Deskripsi Singkat',
+                      hint: 'Masukkan deskripsi acara',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTimePicker(),
+                    const SizedBox(height: 16),
+                    _buildDatePicker(),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      controller: _tempatAcaraController,
+                      label: 'Tempat',
+                      hint: 'Masukkan tempat',
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      controller: _jumlahPartisipanController,
+                      keyboardType: TextInputType.number,
+                      label: 'Jumlah Partisipan',
+                      hint: 'Masukkan jumlah partisipan',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            color: neutral0,
+            child: state is AcaraLoading
+                ? const CustomLoadingButton()
+                : CustomButton(
+                    text: widget.isEditMode ? 'Simpan' : 'Buat',
+                    onTap: () => context.read<AcaraCubit>().addAcara(
+                          acara: AcaraModel(
+                            id_acara: generateUniqueIdAcara(10),
+                            nama_acara: _namaAcaraController.text,
+                            desc_acara: _descAcaraController.text,
+                            waktu_mulai: _startTime.hour,
+                            waktu_selesai: _endTime.hour,
+                            tanggal_acara: _selectedDate,
+                            tempat_acara: _tempatAcaraController.text,
+                            jumlah_partisipan:
+                                int.tryParse(_jumlahPartisipanController.text),
+                          ),
+                        ),
+                  ),
+          ),
+        );
+      },
     );
   }
 
@@ -169,6 +197,15 @@ class _TambahAcaraState extends State<TambahAcara> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: isStart ? _startTime : _endTime,
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() => isStart ? _startTime = picked : _endTime = picked);
@@ -185,5 +222,15 @@ class _TambahAcaraState extends State<TambahAcara> {
     if (picked != null && picked != _selectedDate) {
       setState(() => _selectedDate = picked);
     }
+  }
+
+  String generateUniqueIdAcara(int length) {
+    const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    final random = Random();
+
+    return List.generate(
+            length, (index) => characters[random.nextInt(characters.length)])
+        .join();
   }
 }

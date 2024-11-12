@@ -1,3 +1,5 @@
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/services/acara_service.dart';
 import 'package:face_count/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +12,7 @@ import 'features/auth/cubit/auth_cubit.dart';
 import 'features/auth/login_page.dart';
 import 'features/main_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,6 +30,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => AuthService(),
         ),
+        RepositoryProvider(
+          create: (context) => AcaraService(),
+        )
       ],
       child: MultiBlocProvider(
         providers: [
@@ -36,8 +41,14 @@ class MyApp extends StatelessWidget {
               RepositoryProvider.of<AuthService>(context),
             ),
           ),
+          BlocProvider(
+            create: (context) => AcaraCubit(
+              RepositoryProvider.of<AcaraService>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'FaceCount',
           theme: ThemeData(
             appBarTheme: const AppBarTheme(color: Colors.transparent),

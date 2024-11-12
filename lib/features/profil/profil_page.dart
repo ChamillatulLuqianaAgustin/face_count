@@ -138,27 +138,31 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 Divider(
                   color: neutral50,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/icons/exit.png',
-                        color: redBase,
-                      ),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Text(
-                        'Log Out',
-                        style: mediumTS.copyWith(fontSize: 16, color: redBase),
-                      ),
-                      Spacer(),
-                      Image.asset(
-                        'assets/icons/arrow_right.png',
-                        color: redBase,
-                      )
-                    ],
+                InkWell(
+                  onTap: () => context.read<AuthCubit>().logout(),
+                  child: Ink(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/icons/exit.png',
+                          color: redBase,
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          'Log Out',
+                          style:
+                              mediumTS.copyWith(fontSize: 16, color: redBase),
+                        ),
+                        Spacer(),
+                        Image.asset(
+                          'assets/icons/arrow_right.png',
+                          color: redBase,
+                        )
+                      ],
+                    ),
                   ),
                 )
               ],
