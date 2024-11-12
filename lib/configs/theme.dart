@@ -84,3 +84,10 @@ const Color purpleBase = Color(0xff6242bd);
 const Color purple800 = Color(0xff513a99);
 const Color purple900 = Color(0xff44357a);
 const Color purple950 = Color(0xff291f47);
+
+const List<List<Color>> cardColor = [
+  [purple900, purpleBase],
+  [red900, redBase],
+  [primary900, primaryBase],
+  [yellow900, yellowBase],
+];

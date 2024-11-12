@@ -8,6 +8,7 @@ class AcaraModel {
   final DateTime? tanggal_acara;
   final String? tempat_acara;
   final int? jumlah_partisipan;
+  final int rand_color;
 
   AcaraModel({
     this.id_acara,
@@ -18,6 +19,7 @@ class AcaraModel {
     this.tanggal_acara,
     this.tempat_acara,
     this.jumlah_partisipan,
+    required this.rand_color, 
   });
 
   Map<String, dynamic> toMap() {
@@ -29,7 +31,8 @@ class AcaraModel {
       'waktu_selesai': waktu_selesai,
       'tanggal_acara': tanggal_acara,
       'tempat_acara': tempat_acara,
-      'jumlah_partisipan': jumlah_partisipan
+      'jumlah_partisipan': jumlah_partisipan,
+      'rand_color': rand_color,
     };
   }
 
@@ -43,6 +46,7 @@ class AcaraModel {
       tanggal_acara: (map['tanggal_acara'] as Timestamp).toDate(),
       tempat_acara: map['tempat_acara'],
       jumlah_partisipan: map['jumlah_partisipan'],
+      rand_color: map['rand_color'],
     );
   }
 
@@ -55,6 +59,7 @@ class AcaraModel {
     DateTime? tanggal_acara,
     String? tempat_acara,
     int? jumlah_partisipan,
+    required int rand_color,
   }) =>
       AcaraModel(
         id_acara: id_acara ?? this.id_acara,
@@ -65,5 +70,6 @@ class AcaraModel {
         tanggal_acara: tanggal_acara ?? this.tanggal_acara,
         tempat_acara: tempat_acara ?? this.tempat_acara,
         jumlah_partisipan: jumlah_partisipan ?? this.jumlah_partisipan,
+        rand_color: rand_color
       );
 }

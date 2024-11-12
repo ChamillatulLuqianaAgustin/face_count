@@ -112,11 +112,12 @@ class _BerandaPageState extends State<BerandaPage> {
                   style: regularTS.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 8),
-                ...state.acaraList.map(
+                ...state.acaraList
+                    .where((acara) => (acara.tanggal_acara ?? DateTime.now())
+                        .isAfter(DateTime.now()))
+                    .map(
                   (acara) {
                     return AcaraBerandaCard(
-                      leftColor: purple950,
-                      rightColor: purpleBase,
                       acaraModel: acara,
                       onPressed: () {
                         Navigator.of(context).push(
@@ -130,37 +131,6 @@ class _BerandaPageState extends State<BerandaPage> {
                     );
                   },
                 )
-                // AcaraBerandaCard(
-                //   leftColor: purple950,
-                //   rightColor: purpleBase,
-                //   title: 'Seminar Nasional',
-                //   status: 'Berlangsung',
-                //   time: '08.00 - 12.00',
-                //   place: 'Auditorium Lt. 8',
-                //   onPressed: () {
-                //     Navigator.of(context).push(MaterialPageRoute(
-                //       builder: (context) => const DetailAcara(),
-                //     ));
-                //   },
-                // ),
-                // const SizedBox(height: 8),
-                // AcaraBerandaCard(
-                //   leftColor: red950,
-                //   rightColor: redBase,
-                //   title: 'Kuliah Tamu',
-                //   status: 'Berlangsung',
-                //   time: '08.00 - 12.00',
-                //   place: 'Auditorium Lt. 8',
-                // ),
-                // const SizedBox(height: 8),
-                // AcaraBerandaCard(
-                //   leftColor: primary950,
-                //   rightColor: primaryBase,
-                //   title: 'Workshop',
-                //   status: 'Berlangsung',
-                //   time: '08.00 - 12.00',
-                //   place: 'Auditorium Lt. 8',
-                // ),
               ],
             );
           }

@@ -35,9 +35,9 @@ class _DetailAcaraState extends State<DetailAcara> {
         children: [
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [purpleBase, purple950],
+                colors: cardColor[widget.acara.rand_color],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -62,27 +62,33 @@ class _DetailAcaraState extends State<DetailAcara> {
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.acara.nama_acara.toString(),
-                                style: mediumTS.copyWith(
-                                  fontSize: 24,
-                                  color: neutral0,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.acara.nama_acara.toString(),
+                                  style: mediumTS.copyWith(
+                                    fontSize: 24,
+                                    color: neutral0,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                widget.acara.desc_acara.toString(),
-                                style: regularTS.copyWith(
-                                  fontSize: 16,
-                                  color: neutral300,
+                                const SizedBox(height: 2),
+                                Text(
+                                  widget.acara.desc_acara.toString(),
+                                  style: regularTS.copyWith(
+                                    fontSize: 16,
+                                    color: neutral300,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: 16),
                           const Icon(Icons.edit, color: neutral0),
                           const SizedBox(width: 12),
                           const Icon(Icons.delete, color: neutral0),

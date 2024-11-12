@@ -115,6 +115,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                             tempat_acara: _tempatAcaraController.text,
                             jumlah_partisipan:
                                 int.tryParse(_jumlahPartisipanController.text),
+                            rand_color: Random().nextInt(3),
                           ),
                         ),
                   ),
