@@ -1,6 +1,9 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/acara_state.dart';
 
 import '../beranda/widgets/acara_beranda_card.dart';
 import 'detail_acara_page.dart';
@@ -16,9 +19,17 @@ class _KalenderPageState extends State<KalenderPage> {
   DateTime _selectedDate = DateTime.now();
 
   @override
-  Widget build(BuildContext context) {
-    final isEventEmpty = false;
+  void initState() {
+    super.initState();
+    _fetchEventsForSelectedDate();
+  }
 
+  void _fetchEventsForSelectedDate() {
+    context.read<AcaraCubit>().getAcaraByDate(_selectedDate);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -43,27 +54,22 @@ class _KalenderPageState extends State<KalenderPage> {
       body: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(7, (index) {
-                final date = _selectedDate
-                    .add(Duration(days: index - _selectedDate.weekday));
+                final date = _selectedDate.add(Duration(days: index - _selectedDate.weekday));
                 return GestureDetector(
-                  onTap: () => setState(() => _selectedDate = date),
+                  onTap: () {
+                    setState(() {
+                      _selectedDate = date;
+                      _fetchEventsForSelectedDate();
+                    });
+                  },
                   child: Column(
                     children: [
                       Text(
-                        [
-                          'SUN',
-                          'MON',
-                          'TUE',
-                          'WED',
-                          'THU',
-                          'FRI',
-                          'SAT'
-                        ][date.weekday % 7],
+                        ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][date.weekday % 7],
                         style: regularTS.copyWith(fontSize: 12),
                       ),
                       Text(
@@ -86,105 +92,66 @@ class _KalenderPageState extends State<KalenderPage> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: isEventEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/no_event.png'),
-                        Text(
-                          'Belum ada event yang tercatat.',
-                          style: mediumTS.copyWith(fontSize: 20),
-                        ),
-                        const Text(
-                          'Tambahkan event pertama kamu sekarang!',
-                          style: regularTS,
-                        )
-                      ],
-                    ),
-                  )
-                : ListView(
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => DetailAcaraPage(
-                      //           title: 'Seminar Nasional',
-                      //           subtitle: 'Tips Belajar Machine Learning',
-                      //           date: 'Selasa, 16 Sep 2024',
-                      //           time: '08:00 - 12:00',
-                      //           place: 'Auditorium Lt.8',
-                      //           attendees: '500 orang',
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: AcaraBerandaCard(
-                      //     leftColor: purple950,
-                      //     rightColor: purpleBase,
-                      //     title: 'Seminar Nasional',
-                      //     status: 'Akan Datang',
-                      //     time: '08.00 - 12.00',
-                      //     place: 'Auditorium Lt. 8',
-                      //   ),
-                      // ),
-                      const SizedBox(height: 8),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => DetailAcaraPage(
-                      //           title: 'Kuliah Tamu',
-                      //           subtitle: 'Pembicara Tamu dari Industri',
-                      //           date: 'Rabu, 17 Sep 2024',
-                      //           time: '10:00 - 14:00',
-                      //           place: 'Auditorium Lt.8',
-                      //           attendees: '300 orang',
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: AcaraBerandaCard(
-                      //     leftColor: red950,
-                      //     rightColor: redBase,
-                      //     title: 'Kuliah Tamu',
-                      //     status: 'Akan Datang',
-                      //     time: '10.00 - 14.00',
-                      //     place: 'Auditorium Lt. 8',
-                      //   ),
-                      // ),
-                      const SizedBox(height: 8),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => DetailAcaraPage(
-                      //           title: 'Workshop',
-                      //           subtitle: 'Pelatihan Keterampilan Teknis',
-                      //           date: 'Kamis, 18 Sep 2024',
-                      //           time: '09:00 - 15:00',
-                      //           place: 'Ruang Lab 1',
-                      //           attendees: '100 orang',
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: AcaraBerandaCard(
-                      //     leftColor: primary950,
-                      //     rightColor: primaryBase,
-                      //     title: 'Workshop',
-                      //     status: 'Berlangsung',
-                      //     time: '09.00 - 15.00',
-                      //     place: 'Ruang Lab 1',
-                      //   ),
-                      // ),
-                    ],
-                  ),
+            child: BlocBuilder<AcaraCubit, AcaraState>(
+              builder: (context, state) {
+                if (state is AcaraLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state is AcaraLoaded) {
+                  final acaraList = state.acaraList;
+                  if (acaraList.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/no_event.png'),
+                          Text(
+                            'Belum ada event yang tercatat.',
+                            style: mediumTS.copyWith(fontSize: 20),
+                          ),
+                          const Text(
+                            'Tambahkan event pertama kamu sekarang!',
+                            style: regularTS,
+                          )
+                        ],
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: acaraList.length,
+                      itemBuilder: (context, index) {
+                        final acara = acaraList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailAcaraPage(
+                                  title: acara.nama_acara ?? '',
+                                  subtitle: acara.desc_acara ?? '',
+                                  date: DateFormat('EEEE, d MMM yyyy').format(acara.tanggal_acara ?? DateTime.now()),
+                                  time: '${acara.waktu_mulai} - ${acara.waktu_selesai}',
+                                  place: acara.tempat_acara ?? '',
+                                  attendees: '${acara.jumlah_partisipan} orang',
+                                ),
+                              ),
+                            );
+                          },
+                          child: AcaraBerandaCard(
+                            leftColor: Colors.blue,
+                            rightColor: Colors.lightBlue,
+                            acaraModel: acara,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                } else if (state is AcaraError) {
+                  return Center(child: Text('Failed to load events: ${state.message}'));
+                }
+                return Center(child: Text('No events'));
+              },
+            ),
           ),
         ],
       ),
@@ -199,7 +166,10 @@ class _KalenderPageState extends State<KalenderPage> {
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != _selectedDate) {
-      setState(() => _selectedDate = picked);
+      setState(() {
+        _selectedDate = picked;
+        _fetchEventsForSelectedDate();
+      });
     }
   }
 }
