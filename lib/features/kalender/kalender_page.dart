@@ -1,4 +1,5 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/acara/detail_acara.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -54,11 +55,13 @@ class _KalenderPageState extends State<KalenderPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(7, (index) {
-                final date = _selectedDate.add(Duration(days: index - _selectedDate.weekday));
+                final date = _selectedDate
+                    .add(Duration(days: index - _selectedDate.weekday));
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -69,7 +72,15 @@ class _KalenderPageState extends State<KalenderPage> {
                   child: Column(
                     children: [
                       Text(
-                        ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][date.weekday % 7],
+                        [
+                          'SUN',
+                          'MON',
+                          'TUE',
+                          'WED',
+                          'THU',
+                          'FRI',
+                          'SAT'
+                        ][date.weekday % 7],
                         style: regularTS.copyWith(fontSize: 12),
                       ),
                       Text(
@@ -116,38 +127,35 @@ class _KalenderPageState extends State<KalenderPage> {
                       ),
                     );
                   } else {
-                    return ListView.builder(
+                    return ListView(
                       padding: const EdgeInsets.all(16),
-                      itemCount: acaraList.length,
-                      itemBuilder: (context, index) {
-                        final acara = acaraList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailAcaraPage(
-                                  title: acara.nama_acara ?? '',
-                                  subtitle: acara.desc_acara ?? '',
-                                  date: DateFormat('EEEE, d MMM yyyy').format(acara.tanggal_acara ?? DateTime.now()),
-                                  time: '${acara.waktu_mulai} - ${acara.waktu_selesai}',
-                                  place: acara.tempat_acara ?? '',
-                                  attendees: '${acara.jumlah_partisipan} orang',
-                                ),
-                              ),
-                            );
-                          },
-                          child: AcaraBerandaCard(
-                            leftColor: Colors.blue,
-                            rightColor: Colors.lightBlue,
+                      children: [
+                        ...acaraList.where((acara) {
+                          return acara.tanggal_acara!.year ==
+                                  _selectedDate.year &&
+                              acara.tanggal_acara!.month ==
+                                  _selectedDate.month &&
+                              acara.tanggal_acara!.day == _selectedDate.day;
+                        }).map(
+                          (acara) => AcaraBerandaCard(
                             acaraModel: acara,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DetailAcara(
+                                    acara: acara,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     );
                   }
                 } else if (state is AcaraError) {
-                  return Center(child: Text('Failed to load events: ${state.message}'));
+                  return Center(
+                      child: Text('Failed to load events: ${state.message}'));
                 }
                 return Center(child: Text('No events'));
               },

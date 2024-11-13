@@ -137,6 +137,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 ),
                 Divider(
                   color: neutral50,
+                  height: 0,
                 ),
                 InkWell(
                   onTap: () => context.read<AuthCubit>().logout(),

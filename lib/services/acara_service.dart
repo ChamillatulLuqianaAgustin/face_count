@@ -6,8 +6,10 @@ class AcaraService {
   Future<List<AcaraModel>> getAcara() async {
     print('Fetching acara data from Firestore...');
     try {
-      final snapshot = await FirebaseFirestore.instance.collection('acara').get();
-      print('Firestore query successful. Documents found: ${snapshot.docs.length}');
+      final snapshot =
+          await FirebaseFirestore.instance.collection('acara').get();
+      print(
+          'Firestore query successful. Documents found: ${snapshot.docs.length}');
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
       }).toList();
@@ -18,19 +20,19 @@ class AcaraService {
   }
 
   Future<List<AcaraModel>> getAcaraByDate(DateTime date) async {
-    print('Fetching acara data for date: $date');
+    print(
+        'Fetching acara data for date: ${DateTime(date.year, date.month, date.day)}');
     try {
       // Format the date to remove time components (optional)
-      DateTime startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
-      DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
+      DateTime selectedDate = DateTime(date.year, date.month, date.day);
 
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('date', isGreaterThanOrEqualTo: startOfDay)
-          .where('date', isLessThanOrEqualTo: endOfDay)
+          .where('tanggal_acara', isEqualTo: selectedDate)
           .get();
 
-      print('Firestore query successful. Documents found: ${snapshot.docs.length}');
+      print(
+          'Firestore query successful. Documents found: ${snapshot.docs.length}');
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
       }).toList();
@@ -41,7 +43,8 @@ class AcaraService {
   }
 
   Future<void> addAcara(AcaraModel acara) async {
-    final CollectionReference acaraCollection = FirebaseFirestore.instance.collection('acara');
+    final CollectionReference acaraCollection =
+        FirebaseFirestore.instance.collection('acara');
     try {
       await acaraCollection.doc(acara.id_acara).set(acara.toMap());
     } catch (e) {
