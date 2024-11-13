@@ -18,19 +18,29 @@ class AcaraCubit extends Cubit<AcaraState> {
     }
   }
 
-  // addAcara()
+  Future<void> getAcaraByDate(DateTime date) async {
+  emit(AcaraLoading());
+  try {
+    final acaraList = await _acara.getAcaraByDate(date);
+    print('Acara for ${date.toString()}: ${acaraList.length} found'); // Debug log
+    emit(AcaraLoaded(acaraList));
+  } catch (e) {
+    print('Error fetching acara: $e'); // Debug log
+    emit(AcaraError(e.toString()));
+  }
+}
 
   Future<void> addAcara({required AcaraModel acara}) async {
-    emit(AcaraLoading());
-    
-    try {
-      await _acara.addAcara(acara);
-      emit(AddAcaraSuccess());
-      fetchAcara();
-    } catch (e) {
-      emit(AcaraError(e.toString()));
-    }
+  emit(AcaraLoading());
+  try {
+    await _acara.addAcara(acara);
+    print('Acara added: ${acara.nama_acara}, ${acara.tanggal_acara}');
+    emit(AddAcaraSuccess());
+    fetchAcara(); // Fetch acara after adding new one
+  } catch (e) {
+    emit(AcaraError(e.toString()));
   }
+}
 
   // Future<void> updateAcara(AcaraModel acara) async {
   //   try {
