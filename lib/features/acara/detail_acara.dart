@@ -1,3 +1,4 @@
+import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
@@ -19,6 +20,30 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
+  final List<String> month = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agt',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des'
+  ];
+
+  final List<String> day = [
+    'Minggu',
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jumat',
+    'Sabtu'
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,14 +114,43 @@ class _DetailAcaraState extends State<DetailAcara> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          const Icon(Icons.edit, color: neutral0),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => TambahAcara(
+                                  isEditMode: true,
+                                  acara: widget.acara,
+                                ),
+                              ));
+                            },
+                            child: Ink(
+                              child: Row(
+                                children: [
+                                  ImageIcon(
+                                    AssetImage(
+                                      'assets/icons/edit.png',
+                                    ),
+                                    color: neutral0,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                           const SizedBox(width: 12),
-                          const Icon(Icons.delete, color: neutral0),
+                          InkWell(
+                            onTap: () {},
+                            child: ImageIcon(
+                              AssetImage('assets/icons/delete.png'),
+                              color: neutral0,
+                            ),
+                          ),
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(
+                      height: 16,
+                    ),
 
                     // Event Details
                     Expanded(
@@ -143,13 +197,15 @@ class _DetailAcaraState extends State<DetailAcara> {
                                     tiles: [
                                       ListTile(
                                         leading: const Icon(Icons.event),
-                                        title: Text(widget.acara.tanggal_acara
-                                            .toString()),
+                                        title: Text(
+                                            '${day[widget.acara.tanggal_acara!.weekday % 7]}, ${widget.acara.tanggal_acara!.day} ${month[widget.acara.tanggal_acara!.month - 1]} ${widget.acara.tanggal_acara!.year}'),
                                       ),
                                       ListTile(
                                         leading: const Icon(Icons.access_time),
                                         title: Text(
-                                            '${widget.acara.waktu_mulai}:00 - ${widget.acara.waktu_selesai}:00'),
+                                          '${widget.acara.waktu_mulai! < 10 ? '0' : ''}${widget.acara.waktu_mulai}.00 - '
+                                          '${widget.acara.waktu_selesai! < 10 ? '0' : ''}${widget.acara.waktu_selesai}.00',
+                                        ),
                                       ),
                                       ListTile(
                                         leading: const Icon(Icons.place),

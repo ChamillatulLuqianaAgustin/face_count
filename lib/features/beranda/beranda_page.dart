@@ -112,10 +112,16 @@ class _BerandaPageState extends State<BerandaPage> {
                   style: regularTS.copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 8),
-                ...state.acaraList
-                    .where((acara) => (acara.tanggal_acara ?? DateTime.now())
-                        .isAfter(DateTime.now()))
-                    .map(
+                ...state.acaraList.where((acara) {
+                  final acaraDateTime = DateTime(
+                    acara.tanggal_acara?.year ?? DateTime.now().year,
+                    acara.tanggal_acara?.month ?? DateTime.now().month,
+                    acara.tanggal_acara?.day ?? DateTime.now().day,
+                    // acara.waktu_mulai ?? DateTime.now().hour,
+                    // acara.waktu_selesai ?? DateTime.now().hour,
+                  );
+                  return acaraDateTime.isAfter(DateTime.now());
+                }).map(
                   (acara) {
                     return AcaraBerandaCard(
                       acaraModel: acara,
