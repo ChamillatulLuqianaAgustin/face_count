@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
@@ -9,13 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../configs/theme.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/dummy_textfield.dart';
-// import '../model/acara.dart';
 
 class TambahAcara extends StatefulWidget {
   final bool isEditMode;
-  // final Acara acara;
+  final AcaraModel? acara;
 
-  const TambahAcara({super.key, this.isEditMode = false});
+  const TambahAcara({super.key, this.isEditMode = false, this.acara});
 
   @override
   State<TambahAcara> createState() => _TambahAcaraState();
@@ -32,12 +30,29 @@ class _TambahAcaraState extends State<TambahAcara> {
   TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.isEditMode && widget.acara != null) {
+      _namaAcaraController.text = widget.acara?.nama_acara ?? '';
+      _descAcaraController.text = widget.acara?.desc_acara ?? '';
+      _tempatAcaraController.text = widget.acara?.tempat_acara ?? '';
+      _jumlahPartisipanController.text = widget.acara?.jumlah_partisipan?.toString() ?? '';
+      _selectedDate = widget.acara?.tanggal_acara;
+      _startTime = TimeOfDay(hour: widget.acara?.waktu_mulai ?? 0, minute: 0);
+      _endTime = TimeOfDay(hour: widget.acara?.waktu_selesai ?? 0, minute: 0);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AcaraCubit, AcaraState>(
       listener: (context, state) {
-        // TODO: implement listener
         if (state is AddAcaraSuccess) {
           Navigator.of(context).pop();
+        } else if (state is AcaraError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
         }
       },
       builder: (context, state) {
@@ -67,13 +82,17 @@ class _TambahAcaraState extends State<TambahAcara> {
                     CustomTextField(
                       controller: _namaAcaraController,
                       label: 'Nama Acara',
-                      hint: 'Masukkan nama acara',
+                      hint: widget.isEditMode
+                          ? widget.acara!.nama_acara.toString()
+                          : 'Masukkan nama acara',
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _descAcaraController,
                       label: 'Deskripsi Singkat',
-                      hint: 'Masukkan deskripsi acara',
+                      hint: widget.isEditMode
+                          ? widget.acara!.desc_acara.toString()
+                          : 'Masukkan deskripsi acara',
                     ),
                     const SizedBox(height: 16),
                     _buildTimePicker(),
@@ -83,14 +102,18 @@ class _TambahAcaraState extends State<TambahAcara> {
                     CustomTextField(
                       controller: _tempatAcaraController,
                       label: 'Tempat',
-                      hint: 'Masukkan tempat',
+                      hint: widget.isEditMode
+                          ? widget.acara!.tempat_acara.toString()
+                          : 'Masukkan tempat',
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
                       controller: _jumlahPartisipanController,
                       keyboardType: TextInputType.number,
                       label: 'Jumlah Partisipan',
-                      hint: 'Masukkan jumlah partisipan',
+                      hint: widget.isEditMode
+                          ? widget.acara!.jumlah_partisipan.toString()
+                          : 'Masukkan jumlah partisipan',
                     ),
                   ],
                 ),
@@ -104,20 +127,38 @@ class _TambahAcaraState extends State<TambahAcara> {
                 ? const CustomLoadingButton()
                 : CustomButton(
                     text: widget.isEditMode ? 'Simpan' : 'Buat',
-                    onTap: () => context.read<AcaraCubit>().addAcara(
-                          acara: AcaraModel(
-                            id_acara: generateUniqueIdAcara(10),
-                            nama_acara: _namaAcaraController.text,
-                            desc_acara: _descAcaraController.text,
-                            waktu_mulai: _startTime.hour,
-                            waktu_selesai: _endTime.hour,
-                            tanggal_acara: _selectedDate,
-                            tempat_acara: _tempatAcaraController.text,
-                            jumlah_partisipan:
-                                int.tryParse(_jumlahPartisipanController.text),
-                            rand_color: Random().nextInt(3),
-                          ),
-                        ),
+                    onTap: () {
+                      if (widget.isEditMode) {
+                        context.read<AcaraCubit>().updateAcara(
+                              AcaraModel(
+                                id_acara: widget.acara!.id_acara,
+                                nama_acara: _namaAcaraController.text,
+                                desc_acara: _descAcaraController.text,
+                                waktu_mulai: _startTime.hour,
+                                waktu_selesai: _endTime.hour,
+                                tanggal_acara: _selectedDate,
+                                tempat_acara: _tempatAcaraController.text,
+                                jumlah_partisipan:
+                                    int.tryParse(_jumlahPartisipanController.text),
+                                rand_color: Random().nextInt(3),
+                              ),
+                            );
+                      } else {
+                        context.read<AcaraCubit>().addAcara(
+                              acara: AcaraModel(
+                                id_acara: generateUniqueIdAcara(10),
+                                nama_acara: _namaAcaraController.text,
+                                desc_acara: _descAcaraController.text,
+                                waktu_mulai: _startTime.hour,
+                                waktu_selesai: _endTime.hour,
+                                tanggal_acara: _selectedDate,
+                                tempat_acara: _tempatAcaraController.text,
+                                jumlah_partisipan: int.tryParse(_jumlahPartisipanController.text),
+                                rand_color: Random().nextInt(3),
+                              ),
+                            );
+                      }
+                    },
                   ),
           ),
         );
@@ -217,21 +258,19 @@ class _TambahAcaraState extends State<TambahAcara> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2020),
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != _selectedDate) {
-      setState(() => _selectedDate = picked);
+      setState(() {
+        _selectedDate = picked;
+      });
     }
   }
+}
 
-  String generateUniqueIdAcara(int length) {
-    const characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    final random = Random();
-
-    return List.generate(
-            length, (index) => characters[random.nextInt(characters.length)])
-        .join();
-  }
+String generateUniqueIdAcara(int length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  Random random = Random();
+  return List.generate(length, (index) => characters[random.nextInt(characters.length)]).join();
 }

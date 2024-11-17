@@ -16,6 +16,10 @@ class AcaraLoading extends AcaraState {}
 
 class AddAcaraSuccess extends AcaraState {}
 
+class UpdateAcaraSuccess extends AcaraState {}
+
+class DeleteAcaraSuccess extends AcaraState {}
+
 class AcaraLoaded extends AcaraState {
   final List<AcaraModel> acaraList;
 

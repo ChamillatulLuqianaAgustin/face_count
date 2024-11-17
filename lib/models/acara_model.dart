@@ -19,7 +19,7 @@ class AcaraModel {
     this.tanggal_acara,
     this.tempat_acara,
     this.jumlah_partisipan,
-    required this.rand_color, 
+    required this.rand_color,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,7 +29,7 @@ class AcaraModel {
       'desc_acara': desc_acara,
       'waktu_mulai': waktu_mulai,
       'waktu_selesai': waktu_selesai,
-      'tanggal_acara': tanggal_acara,
+      'tanggal_acara': tanggal_acara != null ? Timestamp.fromDate(tanggal_acara!) : null,
       'tempat_acara': tempat_acara,
       'jumlah_partisipan': jumlah_partisipan,
       'rand_color': rand_color,
@@ -43,7 +43,7 @@ class AcaraModel {
       desc_acara: map['desc_acara'],
       waktu_mulai: map['waktu_mulai'],
       waktu_selesai: map['waktu_selesai'],
-      tanggal_acara: (map['tanggal_acara'] as Timestamp).toDate(),
+      tanggal_acara: map['tanggal_acara'] != null ? (map['tanggal_acara'] as Timestamp).toDate() : null,
       tempat_acara: map['tempat_acara'],
       jumlah_partisipan: map['jumlah_partisipan'],
       rand_color: map['rand_color'],
@@ -59,17 +59,18 @@ class AcaraModel {
     DateTime? tanggal_acara,
     String? tempat_acara,
     int? jumlah_partisipan,
-    required int rand_color,
-  }) =>
-      AcaraModel(
-        id_acara: id_acara ?? this.id_acara,
-        nama_acara: nama_acara ?? this.nama_acara,
-        desc_acara: desc_acara ?? this.desc_acara,
-        waktu_mulai: waktu_mulai ?? this.waktu_mulai,
-        waktu_selesai: waktu_selesai ?? this.waktu_selesai,
-        tanggal_acara: tanggal_acara ?? this.tanggal_acara,
-        tempat_acara: tempat_acara ?? this.tempat_acara,
-        jumlah_partisipan: jumlah_partisipan ?? this.jumlah_partisipan,
-        rand_color: rand_color
-      );
+    int? rand_color,
+  }) {
+    return AcaraModel(
+      id_acara: id_acara ?? this.id_acara,
+      nama_acara: nama_acara ?? this.nama_acara,
+      desc_acara: desc_acara ?? this.desc_acara,
+      waktu_mulai: waktu_mulai ?? this.waktu_mulai,
+      waktu_selesai: waktu_selesai ?? this.waktu_selesai,
+      tanggal_acara: tanggal_acara ?? this.tanggal_acara,
+      tempat_acara: tempat_acara ?? this.tempat_acara,
+      jumlah_partisipan: jumlah_partisipan ?? this.jumlah_partisipan,
+      rand_color: rand_color ?? this.rand_color,
+    );
+  }
 }

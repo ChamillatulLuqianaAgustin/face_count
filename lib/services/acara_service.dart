@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/acara_model.dart';
 
 class AcaraService {
+  // Mendeklarasikan CollectionReference sekali, agar bisa digunakan di seluruh fungsi
+  final CollectionReference acaraCollection = FirebaseFirestore.instance.collection('acara');
+
+  // Fetch all acara
   Future<List<AcaraModel>> getAcara() async {
     print('Fetching acara data from Firestore...');
     try {
@@ -19,6 +23,7 @@ class AcaraService {
     }
   }
 
+  // Fetch acara by date
   Future<List<AcaraModel>> getAcaraByDate(DateTime date) async {
     print(
         'Fetching acara data for date: ${DateTime(date.year, date.month, date.day)}');
@@ -42,13 +47,39 @@ class AcaraService {
     }
   }
 
+  //Add acara
   Future<void> addAcara(AcaraModel acara) async {
-    final CollectionReference acaraCollection =
-        FirebaseFirestore.instance.collection('acara');
     try {
       await acaraCollection.doc(acara.id_acara).set(acara.toMap());
     } catch (e) {
       rethrow;
     }
+  }
+
+  // Update acara
+  Future<void> updateAcara(AcaraModel acara) async {
+    try {
+      await acaraCollection.doc(acara.id_acara).update(acara.toMap());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Delete acara
+  Future<void> deleteAcara(String id) async {
+    try {
+      await acaraCollection.doc(id).delete();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Get acara as stream for real-time updates
+  Stream<List<AcaraModel>> getAcaraStream() {
+    return acaraCollection.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((document) {
+        return AcaraModel.fromMap(document.data() as Map<String, dynamic>);
+      }).toList();
+    });
   }
 }
