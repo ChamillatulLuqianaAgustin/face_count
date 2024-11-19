@@ -32,6 +32,16 @@ class AcaraCubit extends Cubit<AcaraState> {
     }
   }
 
+  List<AcaraModel> filterRiwayatAcara(List<AcaraModel> acaraList) {
+    final now = DateTime.now();
+    return acaraList.where((acara) {
+      if (acara.tanggal_acara != null) {
+        return acara.tanggal_acara!.isBefore(now);
+      }
+      return false;
+    }).toList();
+  }
+
   // Add acara
   Future<void> addAcara({required AcaraModel acara}) async {
   emit(AcaraLoading());
