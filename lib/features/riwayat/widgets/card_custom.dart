@@ -1,11 +1,33 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import '../../../models/acara_model.dart';
 
 class CardCustom extends StatelessWidget {
-  const CardCustom({super.key});
+  final AcaraModel acaraModel;
+  final VoidCallback? onPressed;
+
+  CardCustom({
+    super.key,
+    required this.acaraModel,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
+    DateTime? tanggalAcara = acaraModel.tanggal_acara;
+    String hari = '';
+    String tanggal = '';
+
+    if (tanggalAcara != null) {
+      hari = DateFormat('EEEE', 'id_ID')
+          .format(tanggalAcara); // Nama hari dalam Bahasa Indonesia
+      tanggal = DateFormat('dd MMMM yyyy', 'id_ID')
+          .format(tanggalAcara); // Format tanggal
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -24,14 +46,14 @@ class CardCustom extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Seminar Nasional',
+                      acaraModel.nama_acara.toString(),
                       style: mediumTS.copyWith(
                         fontSize: 16,
                         color: neutral950,
                       ),
                     ),
                     Text(
-                      'Tips Belajar Machine Learning',
+                      acaraModel.desc_acara.toString(),
                       style: regularTS.copyWith(
                         color: neutral300,
                       ),
@@ -83,7 +105,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Selasa, 25 Sep 2023',
+                        '$hari, $tanggal',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -93,7 +115,7 @@ class CardCustom extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 2 - 64,
+                  // width: MediaQuery.of(context).size.width / 2 - 64,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -104,7 +126,8 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '06.00 - 10.00',
+                        '${acaraModel.waktu_mulai! < 10 ? '0' : ''}${acaraModel.waktu_mulai}.00 - '
+                        '${acaraModel.waktu_selesai! < 10 ? '0' : ''}${acaraModel.waktu_selesai}.00',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -129,13 +152,13 @@ class CardCustom extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Tempat',
+                        acaraModel.tempat_acara.toString(),
                         style: regularTS.copyWith(
                           color: neutral400,
                         ),
                       ),
                       Text(
-                        'Auditorium lt. 8',
+                        acaraModel.tempat_acara.toString(),
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -145,7 +168,7 @@ class CardCustom extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 2 - 64,
+                  // width: MediaQuery.of(context).size.width / 2 - 64,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -156,7 +179,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '100 orang',
+                        acaraModel.jumlah_partisipan.toString(),
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -174,7 +197,7 @@ class CardCustom extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: GestureDetector(
-              onTap: () {},
+              onTap: onPressed,
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(

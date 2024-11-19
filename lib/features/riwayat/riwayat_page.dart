@@ -1,11 +1,10 @@
-import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:face_count/features/riwayat/widgets/tab_bar.dart';
-import 'package:face_count/features/riwayat/widgets/tab_bar_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/riwayat/widgets/list_card.dart';
 
 class RiwayatPage extends StatefulWidget {
-  const RiwayatPage({super.key});
+  const RiwayatPage({Key? key}) : super(key: key);
 
   @override
   State<RiwayatPage> createState() => _RiwayatPageState();
@@ -16,17 +15,23 @@ class _RiwayatPageState extends State<RiwayatPage> {
   int selectedPage = 0;
 
   @override
+  void initState() {
+    super.initState();
+    context.read<AcaraCubit>().fetchAcara();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.grey[100],
           title: Text(
             'Riwayat',
-            style: mediumTS.copyWith(
+            style: TextStyle(
               fontSize: 20,
-              color: neutral950,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
           ),
         ),
@@ -40,8 +45,8 @@ class _RiwayatPageState extends State<RiwayatPage> {
               }),
               children: const [
                 ListCard(),
-                Center(child: Text('2')),
-                Center(child: Text('3')),
+                Center(child: Text('Tab 2')),
+                Center(child: Text('Tab 3')),
               ],
             ),
           ],

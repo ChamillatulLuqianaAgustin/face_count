@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'configs/firebase_options.dart';
 import 'configs/theme.dart';
@@ -13,6 +15,7 @@ import 'features/auth/login_page.dart';
 import 'features/main_screen.dart';
 
 Future<void> main() async {
+  await initializeDateFormatting('id_ID', null);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
