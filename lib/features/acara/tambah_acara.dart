@@ -49,6 +49,8 @@ class _TambahAcaraState extends State<TambahAcara> {
       listener: (context, state) {
         if (state is AddAcaraSuccess) {
           Navigator.of(context).pop();
+        } else if (state is UpdateAcaraSuccess) {
+          Navigator.of(context).pop();
         } else if (state is AcaraError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
