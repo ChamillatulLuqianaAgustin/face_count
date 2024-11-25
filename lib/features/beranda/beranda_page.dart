@@ -24,6 +24,10 @@ class _BerandaPageState extends State<BerandaPage> {
     super.initState();
   }
 
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -40,9 +44,7 @@ class _BerandaPageState extends State<BerandaPage> {
               backgroundColor: yellow50,
               backgroundImage: AssetImage('assets/images/memoji.png'),
             ),
-
             const SizedBox(width: 8),
-
             // Fill remaining space
             Expanded(
               child: Column(
@@ -56,8 +58,6 @@ class _BerandaPageState extends State<BerandaPage> {
                   Text(
                     user!.displayName.toString(),
                     style: mediumTS.copyWith(fontSize: 16),
-
-                    // Max Line of Name is 1, if overflow then make it "Ravi Wimar..."
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -66,7 +66,6 @@ class _BerandaPageState extends State<BerandaPage> {
             ),
           ],
         ),
-
         // Notification Button
         actions: [
           Container(
@@ -104,37 +103,74 @@ class _BerandaPageState extends State<BerandaPage> {
                 ),
               );
             }
+
+            // Filter acara hari ini
+            final acaraHariIni = state.acaraList
+                .where((acara) => acara.tanggal_acara != null && isSameDay(acara.tanggal_acara!, DateTime.now()))
+                .toList();
+
+            // Filter dan urutkan acara akan datang
+            final acaraAkanDatang = state.acaraList
+                .where((acara) => acara.tanggal_acara != null && acara.tanggal_acara!.isAfter(DateTime.now()))
+                .toList()
+              ..sort((a, b) => a.tanggal_acara!.compareTo(b.tanggal_acara!)); // Urutkan berdasarkan tanggal
+
+            // Ambil maksimal 5 acara terdekat
+            final acaraTerbatas = acaraAkanDatang.take(5).toList();
+
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(
-                  'Acara Hari Ini',
-                  style: regularTS.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 8),
-                ...state.acaraList
-                    .where((acara) => (acara.tanggal_acara ?? DateTime.now())
-                        .isAfter(DateTime.now()))
-                    .map(
-                  (acara) {
-                    return AcaraBerandaCard(
-                      acaraModel: acara,
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DetailAcara(
-                              acara: acara,
+                // Acara Hari Ini
+                if (acaraHariIni.isNotEmpty) ...[
+                  Text(
+                    'Acara Hari Ini',
+                    style: regularTS.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  ...acaraHariIni.map(
+                    (acara) {
+                      return AcaraBerandaCard(
+                        acaraModel: acara,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailAcara(acara: acara),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                )
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Acara Akan Datang
+                if (acaraTerbatas.isNotEmpty) ...[
+                  Text(
+                    'Acara Akan Datang',
+                    style: regularTS.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  ...acaraTerbatas.map(
+                    (acara) {
+                      return AcaraBerandaCard(
+                        acaraModel: acara,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailAcara(acara: acara),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
               ],
             );
           }
-          print('gagal ambil data');
+          print('Gagal mengambil data acara.');
           return Container();
         },
       ),
