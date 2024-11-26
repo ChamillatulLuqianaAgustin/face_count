@@ -1,19 +1,18 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/acara/detail_acara.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import '../../../models/acara_model.dart';
 
+String formatTanggal(DateTime? tanggal) {
+  if (tanggal == null) return '';
+  return DateFormat('dd-MM-yyyy').format(tanggal);
+}
+
 class CardCustom extends StatelessWidget {
   final AcaraModel acaraModel;
-  final VoidCallback? onPressed;
-
-  CardCustom({
-    super.key,
-    required this.acaraModel,
-    this.onPressed,
-  });
+  const CardCustom({super.key, required this.acaraModel, required Null Function() onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class CardCustom extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: neutral0,
@@ -48,14 +47,14 @@ class CardCustom extends StatelessWidget {
                     Text(
                       acaraModel.nama_acara.toString(),
                       style: mediumTS.copyWith(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: neutral950,
                       ),
                     ),
                     Text(
                       acaraModel.desc_acara.toString(),
                       style: regularTS.copyWith(
-                        color: neutral300,
+                        color: neutral400,
                       ),
                     ),
                   ],
@@ -85,7 +84,10 @@ class CardCustom extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          const Divider(),
+          const Divider(
+            color: neutral50,
+            height: 12,
+          ),
           const SizedBox(
             height: 4,
           ),
@@ -105,7 +107,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '$hari, $tanggal',
+                        formatTanggal(acaraModel.tanggal_acara),
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -126,8 +128,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${acaraModel.waktu_mulai! < 10 ? '0' : ''}${acaraModel.waktu_mulai}.00 - '
-                        '${acaraModel.waktu_selesai! < 10 ? '0' : ''}${acaraModel.waktu_selesai}.00',
+                        '${acaraModel.waktu_mulai}.00 - ${acaraModel.waktu_selesai}.00',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -179,7 +180,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        acaraModel.jumlah_partisipan.toString(),
+                        '${acaraModel.jumlah_partisipan} orang',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -197,22 +198,29 @@ class CardCustom extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: GestureDetector(
-              onTap: onPressed,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DetailAcara(acara: acaraModel),
+                  ),
+                );
+              },
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  width: 60,
-                  height: 28,
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(40),
                     border: Border.all(color: Colors.black),
                   ),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Detail',
-                      style: TextStyle(color: Colors.black),
+                  child: FittedBox(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Detail',
+                        style: mediumTS.copyWith(fontSize: 16),
+                      ),
                     ),
                   ),
                 ),

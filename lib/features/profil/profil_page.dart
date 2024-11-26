@@ -140,32 +140,146 @@ class _ProfilScreenState extends State<ProfilScreen> {
                   height: 0,
                 ),
                 InkWell(
-                  onTap: () => context.read<AuthCubit>().logout(),
-                  child: Ink(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/icons/exit.png',
-                          color: redBase,
+                    onTap: () => showDialog(
+                          barrierDismissible: false,
+                          // barrierColor: neutral400,
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              alignment: Alignment.center,
+                              contentPadding: EdgeInsets.all(0),
+                              // actionsPadding: EdgeInsets.all(0),
+                              // insetPadding: EdgeInsets.all(0),
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
+                              content: Container(
+                                width: double.infinity,
+                                height: 170,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: neutral0,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Anda yakin ingin keluar?',
+                                      style: mediumTS.copyWith(fontSize: 18),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Anda dapat login kembali untuk mengakses akun Anda.',
+                                      style: regularTS.copyWith(
+                                        fontSize: 14,
+                                        color: neutral400,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<AuthCubit>()
+                                                  .logout(); //action logut
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 12,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: primaryBase,
+                                                border: Border.all(
+                                                    color: primaryBase,
+                                                    width: 1.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              child: Text(
+                                                'Keluar',
+                                                style: mediumTS.copyWith(
+                                                  fontSize: 16,
+                                                  color: neutral0,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 12,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: neutral950,
+                                                    width: 1.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              child: Text(
+                                                'Batal',
+                                                style: mediumTS.copyWith(
+                                                  fontSize: 16,
+                                                  color: neutral950,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          'Log Out',
-                          style:
-                              mediumTS.copyWith(fontSize: 16, color: redBase),
-                        ),
-                        Spacer(),
-                        Image.asset(
-                          'assets/icons/arrow_right.png',
-                          color: redBase,
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                    child: Ink(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/icons/exit.png',
+                              color: redBase,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              'Log Out',
+                              style: mediumTS.copyWith(
+                                  fontSize: 16, color: redBase),
+                            ),
+                            Spacer(),
+                            Image.asset(
+                              'assets/icons/arrow_right.png',
+                              color: redBase,
+                            )
+                          ],
+                        ))),
               ],
             ),
           )
