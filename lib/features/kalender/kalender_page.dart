@@ -33,6 +33,8 @@ class _KalenderPageState extends State<KalenderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey[100],
+        surfaceTintColor: Colors.grey[100],
         toolbarHeight: 80,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,30 +129,34 @@ class _KalenderPageState extends State<KalenderPage> {
                       ),
                     );
                   } else {
-                    return ListView(
+                    return ListView.builder(
                       padding: const EdgeInsets.all(16),
-                      children: [
-                        ...acaraList.where((acara) {
-                          return acara.tanggal_acara!.year ==
-                                  _selectedDate.year &&
-                              acara.tanggal_acara!.month ==
-                                  _selectedDate.month &&
-                              acara.tanggal_acara!.day == _selectedDate.day;
-                        }).map(
-                          (acara) => AcaraBerandaCard(
-                            acaraModel: acara,
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => DetailAcara(
-                                    acara: acara,
-                                  ),
+                      itemCount: acaraList.length,
+                      itemBuilder: (context, index) {
+                        final acara = acaraList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailAcaraPage(
+                                  title: acara.nama_acara ?? '',
+                                  subtitle: acara.desc_acara ?? '',
+                                  date: DateFormat('EEEE, d MMM yyyy').format(
+                                      acara.tanggal_acara ?? DateTime.now()),
+                                  time:
+                                      '${acara.waktu_mulai} - ${acara.waktu_selesai}',
+                                  place: acara.tempat_acara ?? '',
+                                  attendees: '${acara.jumlah_partisipan} orang',
                                 ),
-                              );
-                            },
+                              ),
+                            );
+                          },
+                          child: AcaraBerandaCard(
+                            acaraModel: acara,
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     );
                   }
                 } else if (state is AcaraError) {
