@@ -50,6 +50,8 @@ class AcaraModel {
     );
   }
 
+  get status => null;
+
   AcaraModel copyWith({
     String? id_acara,
     String? nama_acara,

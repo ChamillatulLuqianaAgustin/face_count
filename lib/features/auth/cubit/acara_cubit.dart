@@ -10,7 +10,7 @@ class AcaraCubit extends Cubit<AcaraState> {
 
   // Fetch acara list
   Future<void> fetchAcara() async {
-      emit(AcaraLoading());
+    emit(AcaraLoading());
     try {
       final listAcara = await _acara.getAcara();
       emit(AcaraLoaded(listAcara));
@@ -19,12 +19,24 @@ class AcaraCubit extends Cubit<AcaraState> {
     }
   }
 
+  // Fetch acara list selesai
+  Future<void> fetchAcaraSelesai() async {
+    emit(AcaraLoading());
+    try {
+      final listAcara = await _acara.getAcaraSelesai();
+      emit(AcaraLoaded(listAcara));
+    } catch (e) {
+      emit(AcaraError(e.toString()));
+    }
+  }
+
   // Fetch acara by date
   Future<void> getAcaraByDate(DateTime date) async {
-  emit(AcaraLoading());
+    emit(AcaraLoading());
     try {
       final acaraList = await _acara.getAcaraByDate(date);
-      print('Acara for ${date.toString()}: ${acaraList.length} found'); // Debug log
+      print(
+          'Acara for ${date.toString()}: ${acaraList.length} found'); // Debug log
       emit(AcaraLoaded(acaraList));
     } catch (e) {
       print('Error fetching acara: $e'); // Debug log
@@ -44,7 +56,7 @@ class AcaraCubit extends Cubit<AcaraState> {
 
   // Add acara
   Future<void> addAcara({required AcaraModel acara}) async {
-  emit(AcaraLoading());
+    emit(AcaraLoading());
     try {
       await _acara.addAcara(acara);
       print('Acara added: ${acara.nama_acara}, ${acara.tanggal_acara}');
@@ -59,9 +71,9 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> updateAcara(AcaraModel acara) async {
     emit(AcaraLoading());
     try {
-      await _acara.updateAcara(acara);  // Panggil service untuk update
+      await _acara.updateAcara(acara); // Panggil service untuk update
       print('Acara updated: ${acara.nama_acara}, ${acara.tanggal_acara}');
-      fetchAcara();  // Ambil ulang acara setelah update
+      fetchAcara(); // Ambil ulang acara setelah update
       emit(UpdateAcaraSuccess()); // Emit success state
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -72,9 +84,9 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> deleteAcara(String id_acara) async {
     emit(AcaraLoading());
     try {
-      await _acara.deleteAcara(id_acara);  // Panggil service untuk hapus
+      await _acara.deleteAcara(id_acara); // Panggil service untuk hapus
       print('Acara deleted: $id_acara');
-      fetchAcara();  // Ambil ulang acara setelah delete
+      fetchAcara(); // Ambil ulang acara setelah delete
       emit(DeleteAcaraSuccess()); // Emit success state
     } catch (e) {
       emit(AcaraError(e.toString()));
