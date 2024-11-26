@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../services/auth_service.dart';
 
@@ -12,20 +13,22 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> register({
     required String email,
     required String password,
+    required String name,
   }) async {
-    // Set to loading state
     emit(AuthLoading());
     try {
-      await _auth.register(
+      User? user = await _auth.register(
         email: email,
         password: password,
       );
-      // If register success, set to 'authenticated' state
-      emit(Authenticated());
+      if (user != null) {
+        await _auth.updateDisplayName(name);
+        emit(Authenticated(userName: name));
+      } else {
+        emit(AuthError(message: "User registration failed"));
+      }
     } catch (e) {
-      // If register success, set to 'autherror' state
       emit(AuthError(message: e.toString()));
-      emit(Unauthenticated());
     }
   }
 
@@ -33,19 +36,19 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
   }) async {
-    // Set to loading state
     emit(AuthLoading());
     try {
-      await _auth.login(
+      User? user = await _auth.login(
         email: email,
         password: password,
       );
-      // If login success, set to 'authenticated' state
-      emit(Authenticated());
+      if (user != null) {
+        emit(Authenticated(userName: user.email ?? "User"));
+      } else {
+        emit(AuthError(message: "User login failed"));
+      }
     } catch (e) {
-      // If login success, set to 'autherror' state
       emit(AuthError(message: e.toString()));
-      emit(Unauthenticated());
     }
   }
 
