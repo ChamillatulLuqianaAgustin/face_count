@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../auth/cubit/acara_cubit.dart';
 import '../auth/cubit/acara_state.dart';
 import 'widgets/acara_beranda_card.dart';
+import 'widgets/notif_page.dart';
 
 class BerandaPage extends StatefulWidget {
   const BerandaPage({super.key});
@@ -68,16 +69,25 @@ class _BerandaPageState extends State<BerandaPage> {
         ),
         // Notification Button
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: neutral100),
-            ),
-            child: Image.asset(
-              'assets/icons/notification_active.png',
-              width: 24,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(), // Navigasi ke halaman Notifikasi
+                ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: neutral100),
+              ),
+              child: Image.asset(
+                'assets/icons/notification_active.png',
+                width: 24,
+              ),
             ),
           ),
         ],
