@@ -1,7 +1,12 @@
+import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/features/riwayat/widgets/card_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/riwayat/widgets/list_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RiwayatPage extends StatefulWidget {
   const RiwayatPage({Key? key}) : super(key: key);
@@ -17,41 +22,57 @@ class _RiwayatPageState extends State<RiwayatPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AcaraCubit>().fetchAcara();
+    context.read<AcaraCubit>().fetchAcaraSelesai();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.grey[100],
-          title: Text(
-            'Riwayat',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
-            ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.grey[100],
+        surfaceTintColor: Colors.grey[100],
+        title: Text(
+          'Riwayat',
+          style: mediumTS.copyWith(
+            fontSize: 20,
+            color: neutral950,
           ),
         ),
-        body: Stack(
-          children: [
-            PageView(
-              controller: pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (value) => setState(() {
-                selectedPage = value;
-              }),
-              children: const [
-                ListCard(),
-                Center(child: Text('Tab 2')),
-                Center(child: Text('Tab 3')),
-              ],
-            ),
-          ],
-        ),
       ),
+      body: BlocBuilder<AcaraCubit, AcaraState>(
+        builder: (context, state) {
+          if (state is AcaraLoading) {
+            return const CircularProgressIndicator();
+          } else if (state is AcaraLoaded) {
+            return ListView(
+              children: state.acaraList.map((acara) {
+                return CardCustom(
+                  acaraModel: acara,
+                  onPressed: () {},
+                );
+              }).toList(),
+            );
+          }
+          return Container();
+        },
+      ),
+      // body: Stack(
+      //   children: [
+      //     PageView(
+      //       controller: pageController,
+      //       physics: const NeverScrollableScrollPhysics(),
+      //       onPageChanged: (value) => setState(() {
+      //         selectedPage = value;
+      //       }),
+      //       children: const [
+      //         ListCard(),
+      //         Center(child: Text('2')),
+      //         Center(child: Text('3')),
+      //       ],
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

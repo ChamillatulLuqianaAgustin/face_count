@@ -12,7 +12,7 @@ String formatTanggal(DateTime? tanggal) {
 
 class CardCustom extends StatelessWidget {
   final AcaraModel acaraModel;
-  const CardCustom({super.key, required this.acaraModel});
+  const CardCustom({super.key, required this.acaraModel, required Null Function() onPressed});
 
   @override
   Widget build(BuildContext context) {
