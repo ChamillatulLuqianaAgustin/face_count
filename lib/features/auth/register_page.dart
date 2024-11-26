@@ -36,8 +36,6 @@ class _RegisterPageState extends State<RegisterPage> {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) async {
           if (state is Authenticated) {
-            final user = FirebaseAuth.instance.currentUser!;
-            await user.updateDisplayName(_namaController.text);
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const MainScreen()),
               (route) => false,
@@ -45,6 +43,9 @@ class _RegisterPageState extends State<RegisterPage> {
           }
           if (state is AuthError) {
             print(state.message);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
           }
         },
         builder: (context, state) {
@@ -52,7 +53,6 @@ class _RegisterPageState extends State<RegisterPage> {
             body: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                // Bagian Logo dan Selamat Datang
                 Image.asset(
                   'assets/images/logo.png',
                   height: 60,
@@ -69,12 +69,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: regularTS.copyWith(fontSize: 16, color: neutral400),
                   textAlign: TextAlign.center,
                 ),
-
                 const SizedBox(height: 24),
-
-                // Bagian Form Login
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -98,39 +95,34 @@ class _RegisterPageState extends State<RegisterPage> {
                         label: 'Password',
                         hint: 'Masukkan password',
                       ),
-
                       const SizedBox(height: 24),
-
-                      // Register
                       state is AuthLoading
                           ? const CustomLoadingButton()
                           : CustomButton(
                               text: 'Register',
                               onTap: () => context.read<AuthCubit>().register(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  ),
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                name: _namaController.text,
+                              ),
                             ),
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
                 Text.rich(
                   TextSpan(
                     text: 'Sudah punya akun? ',
                     children: [
                       TextSpan(
                         text: 'Login',
-                        style: regularTS.copyWith(
-                            fontSize: 16, color: primaryBase),
+                        style: regularTS.copyWith(fontSize: 16, color: primaryBase),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginPage(),
+                                builder: (context) => const LoginPage(),
                               ),
                             );
                           },
@@ -139,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   style: regularTS.copyWith(fontSize: 16, color: neutral400),
                   textAlign: TextAlign.center,
-                )
+                ),
               ],
             ),
           );
