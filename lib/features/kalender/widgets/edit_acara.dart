@@ -7,7 +7,7 @@ class EditAcara extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const TambahAcara(isEditMode: true),
+      // body: const TambahAcara(isEditMode: true),
     );
   }
 }

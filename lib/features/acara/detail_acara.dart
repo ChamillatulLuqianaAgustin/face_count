@@ -138,7 +138,12 @@ class _DetailAcaraState extends State<DetailAcara> {
                           ),
                           const SizedBox(width: 12),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              context
+                                  .read<AcaraCubit>()
+                                  .deleteAcara(widget.acara.id_acara!);
+                              Navigator.of(context).pop();
+                            },
                             child: ImageIcon(
                               AssetImage('assets/icons/delete.png'),
                               color: neutral0,
