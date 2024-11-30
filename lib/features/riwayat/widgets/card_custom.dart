@@ -1,32 +1,19 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
+import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../models/acara_model.dart';
 
-String formatTanggal(DateTime? tanggal) {
-  if (tanggal == null) return '';
-  return DateFormat('dd-MM-yyyy').format(tanggal);
-}
-
 class CardCustom extends StatelessWidget {
   final AcaraModel acaraModel;
-  const CardCustom({super.key, required this.acaraModel, required Null Function() onPressed});
+  const CardCustom(
+      {super.key,
+      required this.acaraModel,
+      required Null Function() onPressed});
 
   @override
   Widget build(BuildContext context) {
-    DateTime? tanggalAcara = acaraModel.tanggal_acara;
-    String hari = '';
-    String tanggal = '';
-
-    if (tanggalAcara != null) {
-      hari = DateFormat('EEEE', 'id_ID')
-          .format(tanggalAcara); // Nama hari dalam Bahasa Indonesia
-      tanggal = DateFormat('dd MMMM yyyy', 'id_ID')
-          .format(tanggalAcara); // Format tanggal
-    }
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
@@ -45,14 +32,14 @@ class CardCustom extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      acaraModel.nama_acara.toString(),
+                      acaraModel.namaAcara.toString(),
                       style: mediumTS.copyWith(
-                        fontSize: 18,
+                        fontSize: 16,
                         color: neutral950,
                       ),
                     ),
                     Text(
-                      acaraModel.desc_acara.toString(),
+                      acaraModel.descAcara.toString(),
                       style: regularTS.copyWith(
                         color: neutral400,
                       ),
@@ -107,7 +94,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        formatTanggal(acaraModel.tanggal_acara),
+                        formatDate(acaraModel.tanggalAcara ?? DateTime.now()),
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -128,7 +115,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${acaraModel.waktu_mulai}.00 - ${acaraModel.waktu_selesai}.00',
+                        '${formatTo24Hour(acaraModel.waktuMulai ?? DateTime.now())} - ${formatTo24Hour(acaraModel.waktuSelesai ?? DateTime.now())}',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -153,13 +140,13 @@ class CardCustom extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        acaraModel.tempat_acara.toString(),
+                        'Tempat',
                         style: regularTS.copyWith(
                           color: neutral400,
                         ),
                       ),
                       Text(
-                        acaraModel.tempat_acara.toString(),
+                        acaraModel.tempatAcara.toString(),
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,
@@ -180,7 +167,7 @@ class CardCustom extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${acaraModel.jumlah_partisipan} orang',
+                        '${acaraModel.jumlahPartisipan} orang',
                         style: regularTS.copyWith(
                           fontSize: 16,
                           color: neutral950,

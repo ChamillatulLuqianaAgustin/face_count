@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
+import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,13 +34,20 @@ class _TambahAcaraState extends State<TambahAcara> {
   void initState() {
     super.initState();
     if (widget.isEditMode && widget.acara != null) {
-      _namaAcaraController.text = widget.acara?.nama_acara ?? '';
-      _descAcaraController.text = widget.acara?.desc_acara ?? '';
-      _tempatAcaraController.text = widget.acara?.tempat_acara ?? '';
-      _jumlahPartisipanController.text = widget.acara?.jumlah_partisipan?.toString() ?? '';
-      _selectedDate = widget.acara?.tanggal_acara;
-      _startTime = TimeOfDay(hour: widget.acara?.waktu_mulai ?? 0, minute: 0);
-      _endTime = TimeOfDay(hour: widget.acara?.waktu_selesai ?? 0, minute: 0);
+      _namaAcaraController.text = widget.acara?.namaAcara ?? '';
+      _descAcaraController.text = widget.acara?.descAcara ?? '';
+      _tempatAcaraController.text = widget.acara?.tempatAcara ?? '';
+      _jumlahPartisipanController.text =
+          widget.acara?.jumlahPartisipan?.toString() ?? '';
+      _selectedDate = widget.acara?.tanggalAcara;
+      _startTime = TimeOfDay(
+        hour: (widget.acara?.waktuMulai ?? DateTime.now()).hour,
+        minute: (widget.acara?.waktuMulai ?? DateTime.now()).minute,
+      );
+      _endTime = TimeOfDay(
+        hour: (widget.acara?.waktuSelesai ?? DateTime.now()).hour,
+        minute: (widget.acara?.waktuSelesai ?? DateTime.now()).minute,
+      );
     }
   }
 
@@ -85,7 +93,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       controller: _namaAcaraController,
                       label: 'Nama Acara',
                       hint: widget.isEditMode
-                          ? widget.acara!.nama_acara.toString()
+                          ? widget.acara!.namaAcara.toString()
                           : 'Masukkan nama acara',
                     ),
                     const SizedBox(height: 16),
@@ -93,7 +101,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       controller: _descAcaraController,
                       label: 'Deskripsi Singkat',
                       hint: widget.isEditMode
-                          ? widget.acara!.desc_acara.toString()
+                          ? widget.acara!.descAcara.toString()
                           : 'Masukkan deskripsi acara',
                     ),
                     const SizedBox(height: 16),
@@ -105,7 +113,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       controller: _tempatAcaraController,
                       label: 'Tempat',
                       hint: widget.isEditMode
-                          ? widget.acara!.tempat_acara.toString()
+                          ? widget.acara!.tempatAcara.toString()
                           : 'Masukkan tempat',
                     ),
                     const SizedBox(height: 16),
@@ -114,7 +122,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       keyboardType: TextInputType.number,
                       label: 'Jumlah Partisipan',
                       hint: widget.isEditMode
-                          ? widget.acara!.jumlah_partisipan.toString()
+                          ? widget.acara!.jumlahPartisipan.toString()
                           : 'Masukkan jumlah partisipan',
                     ),
                   ],
@@ -133,30 +141,55 @@ class _TambahAcaraState extends State<TambahAcara> {
                       if (widget.isEditMode) {
                         context.read<AcaraCubit>().updateAcara(
                               AcaraModel(
-                                id_acara: widget.acara!.id_acara,
-                                nama_acara: _namaAcaraController.text,
-                                desc_acara: _descAcaraController.text,
-                                waktu_mulai: _startTime.hour,
-                                waktu_selesai: _endTime.hour,
-                                tanggal_acara: _selectedDate,
-                                tempat_acara: _tempatAcaraController.text,
-                                jumlah_partisipan:
-                                    int.tryParse(_jumlahPartisipanController.text),
-                                rand_color: Random().nextInt(3),
+                                idAcara: widget.acara!.idAcara,
+                                namaAcara: _namaAcaraController.text,
+                                descAcara: _descAcaraController.text,
+                                waktuMulai: DateTime(
+                                  _selectedDate!.year,
+                                  _selectedDate!.month,
+                                  _selectedDate!.day,
+                                  _startTime.hour,
+                                  _startTime.minute,
+                                ),
+                                waktuSelesai: DateTime(
+                                  _selectedDate!.year,
+                                  _selectedDate!.month,
+                                  _selectedDate!.day,
+                                  _endTime.hour,
+                                  _endTime.minute,
+                                ),
+                                tanggalAcara: _selectedDate,
+                                tempatAcara: _tempatAcaraController.text,
+                                jumlahPartisipan: int.tryParse(
+                                    _jumlahPartisipanController.text),
+                                randColor: Random().nextInt(cardColor.length),
                               ),
                             );
                       } else {
                         context.read<AcaraCubit>().addAcara(
                               acara: AcaraModel(
-                                id_acara: generateUniqueIdAcara(10),
-                                nama_acara: _namaAcaraController.text,
-                                desc_acara: _descAcaraController.text,
-                                waktu_mulai: _startTime.hour,
-                                waktu_selesai: _endTime.hour,
-                                tanggal_acara: _selectedDate,
-                                tempat_acara: _tempatAcaraController.text,
-                                jumlah_partisipan: int.tryParse(_jumlahPartisipanController.text),
-                                rand_color: Random().nextInt(3),
+                                idAcara: generateUniqueIdAcara(10),
+                                namaAcara: _namaAcaraController.text,
+                                descAcara: _descAcaraController.text,
+                                waktuMulai: DateTime(
+                                  _selectedDate!.year,
+                                  _selectedDate!.month,
+                                  _selectedDate!.day,
+                                  _startTime.hour,
+                                  _startTime.minute,
+                                ),
+                                waktuSelesai: DateTime(
+                                  _selectedDate!.year,
+                                  _selectedDate!.month,
+                                  _selectedDate!.day,
+                                  _endTime.hour,
+                                  _endTime.minute,
+                                ),
+                                tanggalAcara: _selectedDate,
+                                tempatAcara: _tempatAcaraController.text,
+                                jumlahPartisipan: int.tryParse(
+                                    _jumlahPartisipanController.text),
+                                randColor: Random().nextInt(cardColor.length),
                               ),
                             );
                       }
@@ -269,10 +302,4 @@ class _TambahAcaraState extends State<TambahAcara> {
       });
     }
   }
-}
-
-String generateUniqueIdAcara(int length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  Random random = Random();
-  return List.generate(length, (index) => characters[random.nextInt(characters.length)]).join();
 }

@@ -14,7 +14,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
+  // final _phoneController = TextEditingController();
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -23,7 +23,7 @@ class _EditProfileState extends State<EditProfile> {
     // Mengisi controller dengan data pengguna yang ada saat ini
     _namaController.text = user?.displayName ?? '';
     _emailController.text = user?.email ?? '';
-    _phoneController.text = user?.phoneNumber ?? '';
+    // _phoneController.text = user?.phoneNumber ?? '';
   }
 
   Future<void> _updateProfile() async {
@@ -33,19 +33,21 @@ class _EditProfileState extends State<EditProfile> {
         await user?.updateDisplayName(_namaController.text);
       }
 
-      if (_emailController.text.isNotEmpty && _emailController.text != user?.email) {
+      if (_emailController.text.isNotEmpty &&
+          _emailController.text != user?.email) {
         // Memperbarui email pengguna (harus memverifikasi ulang)
         await user?.updateEmail(_emailController.text);
         await user?.sendEmailVerification();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Verifikasi email telah dikirim ke email baru.')),
+          SnackBar(
+              content: Text('Verifikasi email telah dikirim ke email baru.')),
         );
       }
 
-      if (_phoneController.text.isNotEmpty && _phoneController.text != user?.phoneNumber) {
-        // Memperbarui nomor telepon pengguna
-        await _verifyPhoneNumber();
-      }
+      // if (_phoneController.text.isNotEmpty && _phoneController.text != user?.phoneNumber) {
+      //   // Memperbarui nomor telepon pengguna
+      //   await _verifyPhoneNumber();
+      // }
 
       // Menyimpan perubahan setelah berhasil memperbarui
       await user?.reload();
@@ -58,7 +60,6 @@ class _EditProfileState extends State<EditProfile> {
 
       // Kembali ke halaman sebelumnya setelah berhasil menyimpan profil
       Navigator.pop(context);
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Terjadi kesalahan: $e')),
@@ -66,44 +67,44 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<void> _verifyPhoneNumber() async {
-    String phoneNumber = _phoneController.text.trim();
-    if (phoneNumber.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon tidak boleh kosong')));
-      return;
-    }
+  // Future<void> _verifyPhoneNumber() async {
+  //   String phoneNumber = _phoneController.text.trim();
+  //   if (phoneNumber.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon tidak boleh kosong')));
+  //     return;
+  //   }
 
-    try {
-      // Kirim kode verifikasi ke nomor telepon baru
-      await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          // Jika verifikasi otomatis berhasil, lakukan update
-          await user?.updatePhoneNumber(credential);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Verifikasi gagal: ${e.message}')));
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          String smsCode = ''; // Ambil kode SMS dari input pengguna
+  //   try {
+  //     // Kirim kode verifikasi ke nomor telepon baru
+  //     await FirebaseAuth.instance.verifyPhoneNumber(
+  //       phoneNumber: phoneNumber,
+  //       verificationCompleted: (PhoneAuthCredential credential) async {
+  //         // Jika verifikasi otomatis berhasil, lakukan update
+  //         await user?.updatePhoneNumber(credential);
+  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
+  //       },
+  //       verificationFailed: (FirebaseAuthException e) {
+  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Verifikasi gagal: ${e.message}')));
+  //       },
+  //       codeSent: (String verificationId, int? resendToken) async {
+  //         String smsCode = ''; // Ambil kode SMS dari input pengguna
 
-          // Membuat PhoneAuthCredential dengan verificationId dan smsCode
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId,
-            smsCode: smsCode,
-          );
+  //         // Membuat PhoneAuthCredential dengan verificationId dan smsCode
+  //         PhoneAuthCredential credential = PhoneAuthProvider.credential(
+  //           verificationId: verificationId,
+  //           smsCode: smsCode,
+  //         );
 
-          // Update nomor telepon dengan credential
-          await user?.updatePhoneNumber(credential);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Terjadi kesalahan: $e')));
-    }
-  }
+  //         // Update nomor telepon dengan credential
+  //         await user?.updatePhoneNumber(credential);
+  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
+  //       },
+  //       codeAutoRetrievalTimeout: (String verificationId) {},
+  //     );
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Terjadi kesalahan: $e')));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -176,11 +177,11 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(
                   height: 16,
                 ),
-                CustomTextField(
-                  controller: _phoneController,
-                  label: 'Nomor Handphone',
-                  hint: user?.phoneNumber ?? 'Nomor Tidak Tersedia',
-                ),
+                // CustomTextField(
+                //   controller: _phoneController,
+                //   label: 'Nomor Handphone',
+                //   hint: user?.phoneNumber ?? 'Nomor Tidak Tersedia',
+                // ),
               ],
             ),
           ),

@@ -120,7 +120,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        Icon(Icons.lock_outline_rounded),
+                        Image.asset(
+                          'assets/icons/lock.png',
+                          width: 24,
+                        ),
                         SizedBox(
                           width: 12,
                         ),
@@ -130,7 +133,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                               fontSize: 16, color: neutral950),
                         ),
                         Spacer(),
-                        Image.asset('assets/icons/arrow_right.png')
+                        Image.asset(
+                          'assets/icons/arrow_right.png',
+                          width: 24,
+                        ),
                       ],
                     ),
                   ),
@@ -264,6 +270,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                             Image.asset(
                               'assets/icons/exit.png',
                               color: redBase,
+                              width: 24,
                             ),
                             SizedBox(
                               width: 12,
@@ -277,7 +284,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                             Image.asset(
                               'assets/icons/arrow_right.png',
                               color: redBase,
-                            )
+                              width: 24,
+                            ),
                           ],
                         ))),
               ],

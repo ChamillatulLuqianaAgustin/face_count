@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../models/acara_model.dart';
 
@@ -12,13 +13,13 @@ class AcaraService {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('tanggal_acara', isGreaterThanOrEqualTo: DateTime.now())
+          .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
           .get();
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
       }).toList();
     } catch (e) {
-      print('Error fetching acara data: $e');
+      debugPrint('Error fetching acara data: $e');
       rethrow;
     }
   }
@@ -28,37 +29,39 @@ class AcaraService {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('tanggal_acara', isLessThan: DateTime.now())
+          .where('waktu_selesai', isLessThanOrEqualTo: DateTime.now())
           .get();
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
       }).toList();
     } catch (e) {
-      print('Error fetching acara data: $e');
+      debugPrint('Error fetching acara data: $e');
       rethrow;
     }
   }
 
   // Fetch acara by date
   Future<List<AcaraModel>> getAcaraByDate(DateTime date) async {
-    print(
+    debugPrint(
         'Fetching acara data for date: ${DateTime(date.year, date.month, date.day)}');
     try {
       // Format the date to remove time components (optional)
-      DateTime selectedDate = DateTime(date.year, date.month, date.day);
+      DateTime startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
+      DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('tanggal_acara', isEqualTo: selectedDate)
+          .where('waktu_mulai', isGreaterThanOrEqualTo: startOfDay)
+          .where('waktu_mulai', isLessThanOrEqualTo: endOfDay)
           .get();
 
-      print(
+      debugPrint(
           'Firestore query successful. Documents found: ${snapshot.docs.length}');
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
       }).toList();
     } catch (e) {
-      print('Error fetching acara data by date: $e');
+      debugPrint('Error fetching acara data by date: $e');
       rethrow;
     }
   }
@@ -66,7 +69,7 @@ class AcaraService {
   //Add acara
   Future<void> addAcara(AcaraModel acara) async {
     try {
-      await acaraCollection.doc(acara.id_acara).set(acara.toMap());
+      await acaraCollection.doc(acara.idAcara).set(acara.toMap());
     } catch (e) {
       rethrow;
     }
@@ -75,7 +78,7 @@ class AcaraService {
   // Update acara
   Future<void> updateAcara(AcaraModel acara) async {
     try {
-      await acaraCollection.doc(acara.id_acara).update(acara.toMap());
+      await acaraCollection.doc(acara.idAcara).update(acara.toMap());
     } catch (e) {
       rethrow;
     }

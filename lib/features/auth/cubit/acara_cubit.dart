@@ -47,8 +47,8 @@ class AcaraCubit extends Cubit<AcaraState> {
   List<AcaraModel> filterRiwayatAcara(List<AcaraModel> acaraList) {
     final now = DateTime.now();
     return acaraList.where((acara) {
-      if (acara.tanggal_acara != null) {
-        return acara.tanggal_acara!.isBefore(now);
+      if (acara.tanggalAcara != null) {
+        return acara.tanggalAcara!.isBefore(now);
       }
       return false;
     }).toList();
@@ -59,7 +59,7 @@ class AcaraCubit extends Cubit<AcaraState> {
     emit(AcaraLoading());
     try {
       await _acara.addAcara(acara);
-      print('Acara added: ${acara.nama_acara}, ${acara.tanggal_acara}');
+      print('Acara added: ${acara.namaAcara}, ${acara.tanggalAcara}');
       emit(AddAcaraSuccess());
       fetchAcara(); // Fetch acara after adding new one
     } catch (e) {
@@ -72,7 +72,7 @@ class AcaraCubit extends Cubit<AcaraState> {
     emit(AcaraLoading());
     try {
       await _acara.updateAcara(acara); // Panggil service untuk update
-      print('Acara updated: ${acara.nama_acara}, ${acara.tanggal_acara}');
+      print('Acara updated: ${acara.namaAcara}, ${acara.tanggalAcara}');
       fetchAcara(); // Ambil ulang acara setelah update
       emit(UpdateAcaraSuccess()); // Emit success state
     } catch (e) {
