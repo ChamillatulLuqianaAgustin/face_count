@@ -23,10 +23,13 @@ class AuthCubit extends Cubit<AuthState> {
       );
       if (user != null) {
         await _auth.updateDisplayName(name);
+        await user.reload(); // Pastikan pengguna diperbarui
         emit(Authenticated(userName: name));
       } else {
         emit(AuthError(message: "User registration failed"));
       }
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(message: e.message ?? "An unknown error occurred."));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
@@ -43,10 +46,12 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
       if (user != null) {
-        emit(Authenticated(userName: user.email ?? "User"));
+        emit(Authenticated(userName: user.displayName ?? user.email ?? "User"));
       } else {
         emit(AuthError(message: "User login failed"));
       }
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(message: e.message ?? "An unknown error occurred."));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
