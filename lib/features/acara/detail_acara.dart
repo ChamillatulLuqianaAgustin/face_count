@@ -2,6 +2,7 @@ import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
+import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,40 +11,13 @@ import '../../configs/theme.dart';
 
 class DetailAcara extends StatefulWidget {
   final AcaraModel acara;
-  const DetailAcara({
-    super.key,
-    required this.acara,
-  });
+  const DetailAcara({super.key, required this.acara});
 
   @override
   State<DetailAcara> createState() => _DetailAcaraState();
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
-  final List<String> month = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'Mei',
-    'Jun',
-    'Jul',
-    'Agt',
-    'Sep',
-    'Okt',
-    'Nov',
-    'Des'
-  ];
-
-  final List<String> day = [
-    'Minggu',
-    'Senin',
-    'Selasa',
-    'Rabu',
-    'Kamis',
-    'Jumat',
-    'Sabtu'
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +36,7 @@ class _DetailAcaraState extends State<DetailAcara> {
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: cardColor[widget.acara.rand_color],
+                colors: cardColor[widget.acara.randColor],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -92,7 +66,7 @@ class _DetailAcaraState extends State<DetailAcara> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.acara.nama_acara.toString(),
+                                  widget.acara.namaAcara.toString(),
                                   style: mediumTS.copyWith(
                                     fontSize: 24,
                                     color: neutral0,
@@ -102,7 +76,7 @@ class _DetailAcaraState extends State<DetailAcara> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  widget.acara.desc_acara.toString(),
+                                  widget.acara.descAcara.toString(),
                                   style: regularTS.copyWith(
                                     fontSize: 16,
                                     color: neutral300,
@@ -138,12 +112,130 @@ class _DetailAcaraState extends State<DetailAcara> {
                           ),
                           const SizedBox(width: 12),
                           InkWell(
-                            onTap: () {
-                              context
-                                  .read<AcaraCubit>()
-                                  .deleteAcara(widget.acara.id_acara!);
-                              Navigator.of(context).pop();
-                            },
+                            onTap: () => showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  alignment: Alignment.center,
+                                  contentPadding: EdgeInsets.zero,
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  content: Container(
+                                    width: double.infinity,
+                                    height: 170,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: neutral0,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Konfirmasi hapus',
+                                          style:
+                                              mediumTS.copyWith(fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Anda yakin ingin menghapus acara ini? Tindakan ini tidak dapat dibatalkan.',
+                                          style: regularTS.copyWith(
+                                            fontSize: 14,
+                                            color: neutral400,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  // Lakukan penghapusan
+                                                  await context
+                                                      .read<AcaraCubit>()
+                                                      .deleteAcara(widget
+                                                          .acara.idAcara!);
+                                                  // Tutup dialog
+                                                  Navigator.of(context).pop();
+                                                  // Kembali ke halaman sebelumnya
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 12,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: primaryBase,
+                                                    border: Border.all(
+                                                        color: primaryBase,
+                                                        width: 1.5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                  ),
+                                                  child: Text(
+                                                    'Hapus',
+                                                    style: mediumTS.copyWith(
+                                                      fontSize: 16,
+                                                      color: neutral0,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(
+                                                      context); // Tutup dialog tanpa aksi
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 12,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: neutral950,
+                                                        width: 1.5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                  ),
+                                                  child: Text(
+                                                    'Batal',
+                                                    style: mediumTS.copyWith(
+                                                      fontSize: 16,
+                                                      color: neutral950,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                             child: ImageIcon(
                               AssetImage('assets/icons/delete.png'),
                               color: neutral0,
@@ -202,25 +294,26 @@ class _DetailAcaraState extends State<DetailAcara> {
                                     tiles: [
                                       ListTile(
                                         leading: const Icon(Icons.event),
-                                        title: Text(
-                                            '${day[widget.acara.tanggal_acara!.weekday % 7]}, ${widget.acara.tanggal_acara!.day} ${month[widget.acara.tanggal_acara!.month - 1]} ${widget.acara.tanggal_acara!.year}'),
+                                        title: Text(formatToIndonesianDate(
+                                            widget.acara.tanggalAcara ??
+                                                DateTime.now())),
                                       ),
                                       ListTile(
                                         leading: const Icon(Icons.access_time),
                                         title: Text(
-                                          '${widget.acara.waktu_mulai! < 10 ? '0' : ''}${widget.acara.waktu_mulai}.00 - '
-                                          '${widget.acara.waktu_selesai! < 10 ? '0' : ''}${widget.acara.waktu_selesai}.00',
+                                          '${formatTo24Hour(widget.acara.waktuMulai ?? DateTime.now())} - '
+                                          '${formatTo24Hour(widget.acara.waktuSelesai ?? DateTime.now())}',
                                         ),
                                       ),
                                       ListTile(
                                         leading: const Icon(Icons.place),
-                                        title: Text(widget.acara.tempat_acara
+                                        title: Text(widget.acara.tempatAcara
                                             .toString()),
                                       ),
                                       ListTile(
                                         leading: const Icon(Icons.people),
                                         title: Text(
-                                            '${widget.acara.jumlah_partisipan} orang'),
+                                            '${widget.acara.jumlahPartisipan} orang'),
                                       ),
                                     ],
                                   ).toList(),
@@ -269,24 +362,62 @@ class _DetailAcaraState extends State<DetailAcara> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        color: neutral0,
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            await ImagePicker().pickImage(source: ImageSource.camera);
-          },
-          icon: const Icon(Icons.camera_alt, color: neutral0),
-          label: Text(
-            'Scan Pengunjung',
-            style: regularTS.copyWith(color: neutral0),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryBase,
-            minimumSize: const Size(double.infinity, 48),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      //   color: neutral0,
+      //   child: GestureDetector(
+      //     onTap: () async {
+      //       await ImagePicker().pickImage(source: ImageSource.camera);
+      //     },
+      //     // icon: const Icon(Icons.camera_alt, color: neutral0),
+      //     // label: Text(
+      //     //   'Scan Pengunjung',
+      //     //   style: mediumTS.copyWith(color: neutral0),
+      //     // ),
+      //     // style: ElevatedButton.styleFrom(
+      //     //   backgroundColor: primaryBase,
+      //     //   minimumSize: const Size(double.infinity, 48),
+      //     // ),
+
+      //   ),
+      // ),
+      bottomNavigationBar:
+          (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+                  widget.acara.waktuSelesai!.isAfter(DateTime.now()))
+              ? Container(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                  color: neutral0,
+                  child: GestureDetector(
+                    onTap: () async {
+                      await ImagePicker().pickImage(source: ImageSource.camera);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: primaryBase,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/icons/media.png',
+                            color: neutral0,
+                            width: 24,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Scan Pengunjung',
+                            style: mediumTS.copyWith(
+                              color: neutral0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : null,
     );
   }
 }

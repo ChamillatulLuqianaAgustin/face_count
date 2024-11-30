@@ -56,9 +56,7 @@ class ListCard extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => DetailAcara(
-                        acara: acara,
-                      ),
+                      builder: (context) => DetailAcara(acara: acara),
                     ),
                   );
                 },

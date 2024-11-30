@@ -1,3 +1,4 @@
+import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';
 
 import '../../../configs/theme.dart';
@@ -23,7 +24,7 @@ class AcaraBerandaCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           gradient: LinearGradient(
-            colors: cardColor[acaraModel.rand_color],
+            colors: cardColor[acaraModel.randColor],
           ),
         ),
         child: Row(
@@ -36,7 +37,7 @@ class AcaraBerandaCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      acaraModel.nama_acara.toString(),
+                      acaraModel.namaAcara.toString(),
                       style: regularTS.copyWith(
                         fontSize: 24,
                         color: neutral0,
@@ -54,11 +55,28 @@ class AcaraBerandaCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(100),
                         border: Border.all(color: neutral100),
                       ),
+                      // child: Text(
+                      //   (acaraModel.tanggal_acara ?? DateTime.now())
+                      //           .isAfter(DateTime.now())
+                      //       ? 'Akan Datang'
+                      //       : 'Selesai',
+                      //   style: regularTS.copyWith(
+                      //     fontSize: 10,
+                      //     color: neutral100,
+                      //   ),
+                      // ),
                       child: Text(
-                        (acaraModel.tanggal_acara ?? DateTime.now())
-                                .isAfter(DateTime.now())
+                        // Cek apakah tanggal acara sudah lewat atau belum
+                        (acaraModel.tanggalAcara?.isAfter(DateTime.now()) ??
+                                false)
                             ? 'Akan Datang'
-                            : 'Selesai',
+                            : // Cek jika acara hari ini dan waktunya masih berlangsung
+                            (isSameDay(acaraModel.tanggalAcara!,
+                                        DateTime.now()) &&
+                                    DateTime.now()
+                                        .isBefore(acaraModel.waktuSelesai!))
+                                ? 'Berlangsung'
+                                : 'Selesai',
                         style: regularTS.copyWith(
                           fontSize: 10,
                           color: neutral100,
@@ -75,8 +93,8 @@ class AcaraBerandaCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          '${acaraModel.waktu_mulai! < 10 ? '0' : ''}${acaraModel.waktu_mulai}.00 - '
-                          '${acaraModel.waktu_selesai! < 10 ? '0' : ''}${acaraModel.waktu_selesai}.00',
+                          '${formatTo24Hour(acaraModel.waktuMulai ?? DateTime.now())} - '
+                          '${formatTo24Hour(acaraModel.waktuSelesai ?? DateTime.now())}',
                           style: regularTS.copyWith(
                             fontSize: 12,
                             color: neutral100,
@@ -94,7 +112,7 @@ class AcaraBerandaCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          acaraModel.tempat_acara.toString(),
+                          acaraModel.tempatAcara.toString(),
                           style: regularTS.copyWith(
                             fontSize: 12,
                             color: neutral100,

@@ -7,7 +7,7 @@ import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 
 import '../beranda/widgets/acara_beranda_card.dart';
-import 'detail_acara_page.dart';
+import '../acara/detail_acara.dart';
 
 class KalenderPage extends StatefulWidget {
   const KalenderPage({super.key});
@@ -139,16 +139,7 @@ class _KalenderPageState extends State<KalenderPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailAcaraPage(
-                                  title: acara.nama_acara ?? '',
-                                  subtitle: acara.desc_acara ?? '',
-                                  date: DateFormat('EEEE, d MMM yyyy').format(
-                                      acara.tanggal_acara ?? DateTime.now()),
-                                  time:
-                                      '${acara.waktu_mulai} - ${acara.waktu_selesai}',
-                                  place: acara.tempat_acara ?? '',
-                                  attendees: '${acara.jumlah_partisipan} orang',
-                                ),
+                                builder: (context) => DetailAcara(acara: acara),
                               ),
                             );
                           },
