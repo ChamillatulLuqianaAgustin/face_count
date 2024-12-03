@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
+import 'package:face_count/utils/methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,10 +23,6 @@ class _BerandaPageState extends State<BerandaPage> {
   void initState() {
     context.read<AcaraCubit>().fetchAcara();
     super.initState();
-  }
-
-  bool isSameDay(DateTime date1, DateTime date2) {
-    return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
   }
 
   @override
@@ -73,7 +69,8 @@ class _BerandaPageState extends State<BerandaPage> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => NotificationPage(), // Navigasi ke halaman Notifikasi
+                  builder: (context) =>
+                      NotificationPage(), // Navigasi ke halaman Notifikasi
                 ),
               );
             },
@@ -116,14 +113,22 @@ class _BerandaPageState extends State<BerandaPage> {
 
             // Filter acara hari ini
             final acaraHariIni = state.acaraList
-                .where((acara) => acara.tanggal_acara != null && isSameDay(acara.tanggal_acara!, DateTime.now()))
+                .where((acara) =>
+                    acara.tanggalAcara != null &&
+                    isSameDay(acara.tanggalAcara!, DateTime.now()) &&
+                    acara.waktuSelesai!.isAfter(
+                        DateTime.now())) // Check if acara ends after now
                 .toList();
 
             // Filter dan urutkan acara akan datang
             final acaraAkanDatang = state.acaraList
-                .where((acara) => acara.tanggal_acara != null && acara.tanggal_acara!.isAfter(DateTime.now()))
+                .where((acara) =>
+                    acara.tanggalAcara != null &&
+                    acara.tanggalAcara!.isAfter(
+                        DateTime.now())) // Check if acara date is after now
                 .toList()
-              ..sort((a, b) => a.tanggal_acara!.compareTo(b.tanggal_acara!)); // Urutkan berdasarkan tanggal
+              ..sort((a, b) => a.tanggalAcara!
+                  .compareTo(b.tanggalAcara!)); // Sort by tanggalAcara
 
             // Ambil maksimal 5 acara terdekat
             final acaraTerbatas = acaraAkanDatang.take(5).toList();
@@ -180,7 +185,6 @@ class _BerandaPageState extends State<BerandaPage> {
               ],
             );
           }
-          print('Gagal mengambil data acara.');
           return Container();
         },
       ),

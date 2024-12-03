@@ -1,6 +1,9 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/widgets/custom_textfield.dart';
+import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Menggunakan provider untuk mengakses AuthService
+import '../../../services/auth_service.dart'; // Sesuaikan path sesuai dengan struktur project Anda
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -10,8 +13,33 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+
+  Future<void> _changePassword() async {
+    try {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      String oldPassword = _oldPasswordController.text.trim();
+      String newPassword = _newPasswordController.text.trim();
+
+      await authService.changePassword(
+        currentPassword: oldPassword,
+        newPassword: newPassword,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Password berhasil diubah')),
+      );
+
+      Navigator.pop(context); // Kembali ke halaman sebelumnya setelah berhasil
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan: $e')),
+      );
+    }
+  }
+
   @override
-  final _passwordController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +72,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 CustomTextField(
-                  controller: _passwordController,
+                  controller: _oldPasswordController,
                   label: 'Password Lama',
                   hint: 'Masukkan password lama',
                 ),
@@ -52,7 +80,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   height: 16,
                 ),
                 CustomTextField(
-                  controller: _passwordController,
+                  controller: _newPasswordController,
                   label: 'Password Baru',
                   hint: 'Masukkan password baru',
                 ),
@@ -65,11 +93,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                     fontSize: 16,
                     color: primaryBase,
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        color: neutral0,
+        child: CustomButton(
+          text: 'Simpan',
+          onTap: _changePassword,
+        ),
       ),
     );
   }

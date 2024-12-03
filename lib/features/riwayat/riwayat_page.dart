@@ -2,6 +2,7 @@ import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/features/riwayat/widgets/card_custom.dart';
+import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
@@ -43,8 +44,17 @@ class _RiwayatPageState extends State<RiwayatPage> {
       body: BlocBuilder<AcaraCubit, AcaraState>(
         builder: (context, state) {
           if (state is AcaraLoading) {
-            return const CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (state is AcaraLoaded) {
+            // Urutkan berdasarkan tanggal (paling terbaru di atas)
+            state.acaraList.sort((a, b) {
+              final dateA = a.tanggalAcara ?? DateTime(0);
+              final dateB = b.tanggalAcara ?? DateTime(0);
+              return dateB.compareTo(dateA);
+            });
+
             return ListView(
               children: state.acaraList.map((acara) {
                 return CardCustom(
