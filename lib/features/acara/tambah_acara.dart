@@ -162,7 +162,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                                 tempatAcara: _tempatAcaraController.text,
                                 jumlahPartisipan: int.tryParse(
                                     _jumlahPartisipanController.text),
-                                randColor: Random().nextInt(cardColor.length),
+                                randColor: widget.acara!.randColor,
                               ),
                             );
                       } else {
