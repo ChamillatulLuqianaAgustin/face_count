@@ -8,31 +8,65 @@ class AcaraService {
   final CollectionReference acaraCollection =
       FirebaseFirestore.instance.collection('acara');
 
+
   // Fetch all acara
-  Future<List<AcaraModel>> getAcara() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('acara')
-          .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
-          .get();
-      return snapshot.docs.map((document) {
-        return AcaraModel.fromMap(document.data());
-      }).toList();
-    } catch (e) {
-      debugPrint('Error fetching acara data: $e');
-      rethrow;
-    }
+  // Future<List<AcaraModel>> getAcara() async {
+  //   try {
+  //     final snapshot = await FirebaseFirestore.instance
+  //         .collection('acara')
+  //         .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
+  //         .get();
+  //     return snapshot.docs.map((document) {
+  //       return AcaraModel.fromMap(document.data());
+  //     }).toList();
+  //   } catch (e) {
+  //     debugPrint('Error fetching acara data: $e');
+  //     rethrow;
+  //   }
+  // }
+
+
+//   Future<List<AcaraModel>> getAcaraByUser(String userId) async {
+//   try {
+//     final snapshot = await acaraCollection
+//         .where('userId.uid', isEqualTo: userId) 
+//         .get();
+//       debugPrint('Fetched ${snapshot.docs.length} acara for userId: $userId'); // ini buat debug ygy alhamdulillah aman
+//     return snapshot.docs.map((doc) {
+//       return AcaraModel.fromMap(doc.data() as Map<String, dynamic>);
+//     }).toList();
+//   } catch (e) {
+//     throw Exception('Error fetching acara by userId: $e');
+//   }
+// }
+
+Future<List<AcaraModel>> getAcara(String userId) async {
+  try {
+    final snapshot = await acaraCollection
+        .where('userId.uid', isEqualTo: userId)
+        .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
+        .get();
+
+      debugPrint('Fetched ${snapshot.docs.length} acara for userId: $userId'); // ini buat debug ygy alhamdulillah aman
+
+    return snapshot.docs.map((doc) {
+      return AcaraModel.fromMap(doc.data() as Map<String, dynamic>);
+    }).toList();
+  } catch (e) {
+    throw Exception('Error fetching acara by userId: $e');
   }
+}
+
 
   // Fetch all acara selesai
-  Future<List<AcaraModel>> getAcaraSelesai() async {
+  Future<List<AcaraModel>> getAcaraSelesai(String userId) async {
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('acara')
+      final snapshot = await acaraCollection
+          .where('userId.uid', isEqualTo: userId)
           .where('waktu_selesai', isLessThanOrEqualTo: DateTime.now())
           .get();
-      return snapshot.docs.map((document) {
-        return AcaraModel.fromMap(document.data());
+      return snapshot.docs.map((doc) {
+        return AcaraModel.fromMap(doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
       debugPrint('Error fetching acara data: $e');
@@ -41,7 +75,7 @@ class AcaraService {
   }
 
   // Fetch acara by date
-  Future<List<AcaraModel>> getAcaraByDate(DateTime date) async {
+  Future<List<AcaraModel>> getAcaraByDate(DateTime date, String userId) async {
     debugPrint(
         'Fetching acara data for date: ${DateTime(date.year, date.month, date.day)}');
     try {
@@ -51,6 +85,7 @@ class AcaraService {
 
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
+          .where('userId.uid', isEqualTo: userId)
           .where('waktu_mulai', isGreaterThanOrEqualTo: startOfDay)
           .where('waktu_mulai', isLessThanOrEqualTo: endOfDay)
           .get();
@@ -65,6 +100,7 @@ class AcaraService {
       rethrow;
     }
   }
+
 
   //Add acara
   Future<void> addAcara(AcaraModel acara) async {

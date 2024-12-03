@@ -1,5 +1,5 @@
 import 'package:face_count/configs/theme.dart';
-import 'package:face_count/features/auth/forgot_password_page.dart';
+import 'package:face_count/features/auth/login_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,14 +9,14 @@ import '../main_screen.dart';
 import 'cubit/auth_cubit.dart';
 import 'register_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgotPasswordState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -54,15 +54,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Selamat Datang! 👋🏻',
+                  'Lupa Password?',
                   style: mediumTS.copyWith(fontSize: 24, color: neutral950),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Masuk ke FaceCount untuk memulai\nperjalanan Anda bersama kami!',
+                  'Atur ulang kata sandi akun anda',
                   style: regularTS.copyWith(fontSize: 16, color: neutral400),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left ,
                 ),
 
                 const SizedBox(height: 24),
@@ -82,35 +82,9 @@ class _LoginPageState extends State<LoginPage> {
                         hint: 'Masukkan alamat email',
                       ),
                       const SizedBox(height: 16),
-                      CustomTextField(
-                        controller: _passwordController,
-                        label: 'Password',
-                        hint: 'Masukkan password',
-                      ),
-
-                      const SizedBox(height: 24),
 
                       // Lupa password
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            );
-                        },
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Lupa Password?',
-                            style: mediumTS.copyWith(
-                              fontSize: 16,
-                              color: primaryBase,
-                            ),
-                          ),
-                        ),
-                      ),
+                     
 
                       const SizedBox(height: 24),
 
@@ -118,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                       state is AuthLoading
                           ? const CustomLoadingButton()
                           : CustomButton(
-                              text: 'Login',
+                              text: 'Confirm',
                               onTap: () => context.read<AuthCubit>().login(
                                     email: _emailController.text,
                                     password: _passwordController.text,
@@ -132,10 +106,10 @@ class _LoginPageState extends State<LoginPage> {
 
                 Text.rich(
                   TextSpan(
-                    text: 'Belum punya akun? ',
+                    text: 'Ingat kata sandi anda? ',
                     children: [
                       TextSpan(
-                        text: 'Daftar',
+                        text: 'Login',
                         style: regularTS.copyWith(
                             fontSize: 16, color: primaryBase),
                         recognizer: TapGestureRecognizer()
@@ -143,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterPage(),
+                                builder: (context) => LoginPage(),
                               ),
                             );
                           },
