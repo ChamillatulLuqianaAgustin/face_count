@@ -32,6 +32,10 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
+    
+    // buildFeatures {
+    //     buildConfig = true
+    // }
 
     buildTypes {
         release {
@@ -45,6 +49,11 @@ android {
 flutter {
     source = "../.."
 }
+
+// dependencies {
+//     implementation platform('com.google.firebase:firebase-bom:32.1.1') // Versi terbaru
+//     implementation 'com.google.firebase:firebase-ml-modeldownloader'
+// }
 
 // dependencies {
 //     implementation 'com.google.android.gms:play-services-basement:latest_version'
