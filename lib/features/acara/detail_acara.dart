@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:face_count/features/acara/models/result_page.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
@@ -9,7 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
 import 'package:camera/camera.dart';
-import 'result_scan.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
 
 class DetailAcara extends StatefulWidget {
@@ -21,6 +26,67 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+      sendImages(selectedImages, context);
+    }
+    print("Image List Length:" + imageFileList!.length.toString());
+    setState(() {});
+  }
+
+  Future<void> sendImages(List<XFile> imageFiles, BuildContext context) async {
+    final uri = Uri.parse('http://172.24.161.222:5000/predict');
+
+    var request = http.MultipartRequest('POST', uri);
+
+    try {
+      // Tambahkan setiap gambar ke request
+      for (var image in imageFiles) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'images', // Key yang sesuai dengan backend
+            image.path,
+          ),
+        );
+      }
+
+      // Kirim request
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final responseData = await http.Response.fromStream(response);
+        final decodedResponse = jsonDecode(responseData.body);
+
+        // Data dari backend
+        int maleCount = decodedResponse['male'];
+        int femaleCount = decodedResponse['female'];
+        List<String> processedImageUrls =
+            List<String>.from(decodedResponse['processed_images']);
+
+        // Navigasi ke ResultPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultPage(
+              imageUrls: processedImageUrls,
+              maleCount: maleCount,
+              femaleCount: femaleCount,
+            ),
+          ),
+        );
+      } else {
+        print('Failed to predict. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error while sending images: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -423,8 +489,9 @@ class _DetailAcaraState extends State<DetailAcara> {
           color: neutral0,
           child: GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CameraScreen()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => CameraScreen()));
+              selectImages();
             },
             child: Container(
               padding: const EdgeInsets.all(16),
