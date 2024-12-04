@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
 import 'package:camera/camera.dart';
+import 'result_scan.dart';
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
 
 class DetailAcara extends StatefulWidget {
@@ -326,9 +327,35 @@ class _DetailAcaraState extends State<DetailAcara> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                Text('Jumlah Pengunjung',
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Ringkasan',
                                     style: regularTS.copyWith(
-                                        fontSize: 18, color: Colors.black87)),
+                                      fontSize: 18,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ScanResultPage(), // Replace with your actual screen
+                                      ),
+                                    );
+                                    },
+                                    child: Text(
+                                      'Lihat Hasil Scan',
+                                      style: regularTS.copyWith(
+                                        fontSize: 14,
+                                        color: primaryBase,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                                 const SizedBox(height: 16),
                                 Container(
                                   decoration: BoxDecoration(
