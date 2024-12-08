@@ -41,6 +41,7 @@ class _DetailAcaraState extends State<DetailAcara> {
 
   Future<void> sendImages(List<XFile> imageFiles, BuildContext context) async {
     final uri = Uri.parse('http://172.24.161.222:5000/predict');
+    // final uri = Uri.parse('http://193.168.62.23:5000/predict');
 
     var request = http.MultipartRequest('POST', uri);
 
@@ -94,7 +95,8 @@ class _DetailAcaraState extends State<DetailAcara> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: neutral0),
+            icon: const ImageIcon(AssetImage('asset/icons/arrow_back.png'),
+                color: neutral0),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

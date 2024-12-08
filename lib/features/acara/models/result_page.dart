@@ -1,3 +1,4 @@
+import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
 
 class ResultPage extends StatelessWidget {
@@ -16,7 +17,21 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Prediction Results"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/icons/arrow_back.png',
+            color: neutral950,
+            width: 28,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        titleSpacing: 0,
+        title: Text(
+          'Edit Profil',
+          style: mediumTS.copyWith(fontSize: 20, color: neutral950),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,22 +39,40 @@ class ResultPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Results Summary",
-              style: Theme.of(context).textTheme.headlineSmall,
+              "Partisipan",
+              style: regularTS.copyWith(fontSize: 18, color: neutral950),
             ),
             const SizedBox(height: 16.0),
-            Text(
-              "Male Count: $maleCount",
-              style: const TextStyle(fontSize: 18),
-            ),
-            Text(
-              "Female Count: $femaleCount",
-              style: const TextStyle(fontSize: 18),
+            Container(
+              decoration: BoxDecoration(
+                color: neutral50,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: neutral100,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
+              ),
+              child: Column(
+                children: ListTile.divideTiles(
+                  context: context,
+                  color: neutral100,
+                  tiles: [
+                    ListTile(
+                      leading: const Icon(Icons.male),
+                      title: Text("$maleCount orang"),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.female),
+                      title: Text('$femaleCount orang'),
+                    ),
+                  ],
+                ).toList(),
+              ),
             ),
             const SizedBox(height: 24.0),
             Text(
-              "Processed Images",
-              style: Theme.of(context).textTheme.titleLarge,
+              "Foto",
+              style: regularTS.copyWith(fontSize: 18, color: neutral950),
             ),
             const SizedBox(height: 8.0),
             Expanded(
@@ -52,8 +85,16 @@ class ResultPage extends StatelessWidget {
                 itemCount: imageUrls.length,
                 itemBuilder: (context, index) {
                   return Image.network(
-                    imageUrls[index],
+                    'http://172.24.161.222:5000/static/processed/1000000034.jpg',
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Text(
+                          'Failed to load image',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
