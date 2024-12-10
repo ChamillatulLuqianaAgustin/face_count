@@ -44,11 +44,6 @@ class _EditProfileState extends State<EditProfile> {
         );
       }
 
-      // if (_phoneController.text.isNotEmpty && _phoneController.text != user?.phoneNumber) {
-      //   // Memperbarui nomor telepon pengguna
-      //   await _verifyPhoneNumber();
-      // }
-
       // Menyimpan perubahan setelah berhasil memperbarui
       await user?.reload();
       setState(() {}); // Update UI dengan data baru
@@ -66,45 +61,6 @@ class _EditProfileState extends State<EditProfile> {
       );
     }
   }
-
-  // Future<void> _verifyPhoneNumber() async {
-  //   String phoneNumber = _phoneController.text.trim();
-  //   if (phoneNumber.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon tidak boleh kosong')));
-  //     return;
-  //   }
-
-  //   try {
-  //     // Kirim kode verifikasi ke nomor telepon baru
-  //     await FirebaseAuth.instance.verifyPhoneNumber(
-  //       phoneNumber: phoneNumber,
-  //       verificationCompleted: (PhoneAuthCredential credential) async {
-  //         // Jika verifikasi otomatis berhasil, lakukan update
-  //         await user?.updatePhoneNumber(credential);
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
-  //       },
-  //       verificationFailed: (FirebaseAuthException e) {
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Verifikasi gagal: ${e.message}')));
-  //       },
-  //       codeSent: (String verificationId, int? resendToken) async {
-  //         String smsCode = ''; // Ambil kode SMS dari input pengguna
-
-  //         // Membuat PhoneAuthCredential dengan verificationId dan smsCode
-  //         PhoneAuthCredential credential = PhoneAuthProvider.credential(
-  //           verificationId: verificationId,
-  //           smsCode: smsCode,
-  //         );
-
-  //         // Update nomor telepon dengan credential
-  //         await user?.updatePhoneNumber(credential);
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nomor telepon berhasil diperbarui')));
-  //       },
-  //       codeAutoRetrievalTimeout: (String verificationId) {},
-  //     );
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Terjadi kesalahan: $e')));
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -177,11 +133,6 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(
                   height: 16,
                 ),
-                // CustomTextField(
-                //   controller: _phoneController,
-                //   label: 'Nomor Handphone',
-                //   hint: user?.phoneNumber ?? 'Nomor Tidak Tersedia',
-                // ),
               ],
             ),
           ),

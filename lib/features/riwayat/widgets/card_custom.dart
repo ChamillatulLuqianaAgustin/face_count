@@ -7,10 +7,11 @@ import '../../../models/acara_model.dart';
 
 class CardCustom extends StatelessWidget {
   final AcaraModel acaraModel;
-  const CardCustom(
-      {super.key,
-      required this.acaraModel,
-      required Null Function() onPressed});
+  const CardCustom({
+    super.key,
+    required this.acaraModel,
+    required VoidCallback? onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +29,27 @@ class CardCustom extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      acaraModel.namaAcara.toString(),
-                      style: mediumTS.copyWith(
-                        fontSize: 16,
-                        color: neutral950,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        acaraModel.namaAcara.toString(),
+                        style: mediumTS.copyWith(
+                          fontSize: 16,
+                          color: neutral950,
+                        ),
                       ),
-                    ),
-                    Text(
-                      acaraModel.descAcara.toString(),
-                      style: regularTS.copyWith(
-                        color: neutral400,
+                      Text(
+                        acaraModel.descAcara.toString(),
+                        style: regularTS.copyWith(
+                          color: neutral400,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(
