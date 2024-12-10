@@ -1,4 +1,5 @@
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/picture_cubit.dart';
 import 'package:face_count/features/beranda/splash_screen.dart';
 import 'package:face_count/services/acara_service.dart';
 import 'package:face_count/services/auth_service.dart';
@@ -47,6 +48,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => AcaraCubit(
+              RepositoryProvider.of<AcaraService>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => PictureCubit(
               RepositoryProvider.of<AcaraService>(context),
             ),
           ),

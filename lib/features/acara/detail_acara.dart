@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:face_count/features/acara/models/result_page.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/picture_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
@@ -32,8 +33,6 @@ class _DetailAcaraState extends State<DetailAcara> {
     required List<MediaModel> images,
   }) async {
     final uri = Uri.parse('http://172.24.161.222:5000/predict');
-    // final uri = Uri.parse('http://193.168.62.23:5000/predict');
-
     var request = http.MultipartRequest('POST', uri);
 
     try {
@@ -59,12 +58,13 @@ class _DetailAcaraState extends State<DetailAcara> {
         List<String> processedImageUrls =
             List<String>.from(decodedResponse['processed_images']);
 
+        context.read<PictureCubit>().addPicture(processedImageUrls, widget.acara.idAcara!);
         // Navigasi ke ResultPage
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ResultPage(
-              imageUrls: processedImageUrls,
+              processedImageUrls: processedImageUrls,
               maleCount: maleCount,
               femaleCount: femaleCount,
             ),
@@ -488,5 +488,5 @@ class _DetailAcaraState extends State<DetailAcara> {
         )
         // : null,
         );
-   }
+  }
 }

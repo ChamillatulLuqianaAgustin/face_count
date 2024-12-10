@@ -1,5 +1,6 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
+import 'package:face_count/features/auth/cubit/picture_cubit.dart';
 import 'package:face_count/utils/methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _BerandaPageState extends State<BerandaPage> {
   @override
   void initState() {
     context.read<AcaraCubit>().fetchAcara();
+    context.read<PictureCubit>().fetchPicture();
     super.initState();
   }
 
