@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:face_count/features/acara/models/result_page.dart';
 import 'package:face_count/features/acara/result_scan.dart';
@@ -7,13 +8,11 @@ import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
-import 'package:face_count/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:multiple_image_camera/camera_file.dart';
+import 'package:multiple_image_camera/multiple_image_camera.dart';
 import '../../configs/theme.dart';
-import 'package:camera/camera.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
@@ -27,33 +26,25 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
-  final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
+  List<MediaModel>? imageList = [];
 
-  void selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
-      sendImages(selectedImages, context);
-    }
-    print("Image List Length:" + imageFileList!.length.toString());
-    setState(() {});
-  }
-
-  Future<void> sendImages(List<XFile> imageFiles, BuildContext context) async {
+  Future<void> sendImages(
+    BuildContext context, {
+    required List<MediaModel> images,
+  }) async {
     final uri = Uri.parse('http://172.24.161.222:5000/predict');
+    // final uri = Uri.parse('http://193.168.62.23:5000/predict');
 
     var request = http.MultipartRequest('POST', uri);
 
     try {
-      // Tambahkan setiap gambar ke request
-      for (var image in imageFiles) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'images', // Key yang sesuai dengan backend
-            image.path,
-          ),
+      for (var image in images) {
+        final file = File(image.file.path);
+        final multipartFile = await http.MultipartFile.fromPath(
+          'images', // Field name in the API
+          file.path,
         );
+        request.files.add(multipartFile);
       }
 
       // Kirim request
@@ -95,7 +86,8 @@ class _DetailAcaraState extends State<DetailAcara> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: neutral0),
+            icon: const ImageIcon(AssetImage('assets/icons/arrow_back.png'),
+                color: neutral0),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -489,10 +481,11 @@ class _DetailAcaraState extends State<DetailAcara> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           color: neutral0,
           child: GestureDetector(
-            onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => CameraScreen()));
-              selectImages();
+            onTap: () async {
+              await MultipleImageCamera.capture(context: context).then(
+                (images) => setState(() => imageList = images),
+              );
+              sendImages(context, images: imageList!);
             },
             child: Container(
               padding: const EdgeInsets.all(16),
@@ -522,5 +515,5 @@ class _DetailAcaraState extends State<DetailAcara> {
         )
         : null,
         );
-  }
+   }
 }

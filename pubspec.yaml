@@ -37,11 +37,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
-  image_picker: ^1.1.2
+  http: ^1.2.2
   intl: ^0.20.1
+  multiple_image_camera: ^0.0.2
   # firebase_ml_model_downloader: 0.3.1+5
   tflite_flutter: ^0.11.0
-  camera: 0.11.0+2
+  # multi_image_picker_plus: 0.0.5
 
 dev_dependencies:
   change_app_package_name: ^1.4.0

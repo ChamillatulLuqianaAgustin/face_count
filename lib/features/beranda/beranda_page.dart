@@ -91,7 +91,9 @@ class _BerandaPageState extends State<BerandaPage> {
       ),
       body: BlocBuilder<AcaraCubit, AcaraState>(
         builder: (context, state) {
-          if (state is AcaraLoaded) {
+          if (state is AcaraLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is AcaraLoaded) {
             if (state.acaraList.isEmpty) {
               return Center(
                 child: Column(
@@ -124,7 +126,8 @@ class _BerandaPageState extends State<BerandaPage> {
             final acaraAkanDatang = state.acaraList
                 .where((acara) =>
                     acara.tanggalAcara != null &&
-                    acara.tanggalAcara!.isAfter(
+                    acara.tanggalAcara!.isAfter(DateTime.now()) &&
+                    !isSameDay(acara.tanggalAcara!,
                         DateTime.now())) // Check if acara date is after now
                 .toList()
               ..sort((a, b) => a.tanggalAcara!
