@@ -32,6 +32,7 @@ class _ResultPageState extends State<ResultPage> {
 
   Future<void> fetchProcessedImages() async {
     try {
+      // Replace with your actual server IP/domain
       final response = await http
           .get(Uri.parse('http://172.24.161.222:5000/processed-images'));
       if (response.statusCode == 200) {
