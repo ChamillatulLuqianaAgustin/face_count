@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:face_count/features/acara/models/result_page.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
@@ -9,6 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../configs/theme.dart';
 import 'package:camera/camera.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
 
 class DetailAcara extends StatefulWidget {
@@ -20,6 +26,68 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
+      sendImages(selectedImages, context);
+    }
+    print("Image List Length:" + imageFileList!.length.toString());
+    setState(() {});
+  }
+
+  Future<void> sendImages(List<XFile> imageFiles, BuildContext context) async {
+    final uri = Uri.parse('http://172.24.161.222:5000/predict');
+    // final uri = Uri.parse('http://193.168.62.23:5000/predict');
+
+    var request = http.MultipartRequest('POST', uri);
+
+    try {
+      // Tambahkan setiap gambar ke request
+      for (var image in imageFiles) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'images', // Key yang sesuai dengan backend
+            image.path,
+          ),
+        );
+      }
+
+      // Kirim request
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final responseData = await http.Response.fromStream(response);
+        final decodedResponse = jsonDecode(responseData.body);
+
+        // Data dari backend
+        int maleCount = decodedResponse['male'];
+        int femaleCount = decodedResponse['female'];
+        List<String> processedImageUrls =
+            List<String>.from(decodedResponse['processed_images']);
+
+        // Navigasi ke ResultPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResultPage(
+              imageUrls: processedImageUrls,
+              maleCount: maleCount,
+              femaleCount: femaleCount,
+            ),
+          ),
+        );
+      } else {
+        print('Failed to predict. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error while sending images: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +97,14 @@ class _DetailAcaraState extends State<DetailAcara> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: neutral0),
           onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const ImageIcon(AssetImage('asset/icons/arrow_back.png'),
+                color: neutral0),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -360,6 +436,43 @@ class _DetailAcaraState extends State<DetailAcara> {
                   ],
                 ),
               );
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        // bottomNavigationBar: Container(
+        //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        //   color: neutral0,
+        //   child: GestureDetector(
+        //     onTap: () async {
+        //       await ImagePicker().pickImage(source: ImageSource.camera);
+        //     },
+        //     // icon: const Icon(Icons.camera_alt, color: neutral0),
+        //     // label: Text(
+        //     //   'Scan Pengunjung',
+        //     //   style: mediumTS.copyWith(color: neutral0),
+        //     // ),
+        //     // style: ElevatedButton.styleFrom(
+        //     //   backgroundColor: primaryBase,
+        //     //   minimumSize: const Size(double.infinity, 48),
+        //     // ),
+
+        //   ),
+        // ),
+        bottomNavigationBar:
+            // (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+            //         widget.acara.waktuSelesai!.isAfter(DateTime.now()))
+            /*?*/ Container(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          color: neutral0,
+          child: GestureDetector(
+            onTap: () {
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => CameraScreen()));
+              selectImages();
             },
           ),
         ],
