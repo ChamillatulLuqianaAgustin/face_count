@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class ResultPage extends StatelessWidget {
-  final List<String> imageUrls; // URL gambar hasil olahan dari backend
+class ResultPage extends StatefulWidget {
+  final List<String> imageUrls;
   final int maleCount; // Jumlah male
   final int femaleCount; // Jumlah female
 
@@ -12,6 +15,41 @@ class ResultPage extends StatelessWidget {
     required this.maleCount,
     required this.femaleCount,
   }) : super(key: key);
+
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  List<String> imageUrls = []; // URL gambar hasil olahan dari backend
+  bool isLoading = true; // For showing loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProcessedImages();
+  }
+
+  Future<void> fetchProcessedImages() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://172.24.161.222:5000/processed-images'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          imageUrls = List<String>.from(data['processed_images']);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load images');
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +97,11 @@ class ResultPage extends StatelessWidget {
                   tiles: [
                     ListTile(
                       leading: const Icon(Icons.male),
-                      title: Text("$maleCount orang"),
+                      title: Text("${widget.maleCount} orang"),
                     ),
                     ListTile(
                       leading: const Icon(Icons.female),
-                      title: Text('$femaleCount orang'),
+                      title: Text('${widget.femaleCount} orang'),
                     ),
                   ],
                 ).toList(),
@@ -75,30 +113,34 @@ class ResultPage extends StatelessWidget {
               style: regularTS.copyWith(fontSize: 18, color: neutral950),
             ),
             const SizedBox(height: 8.0),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 2 gambar per baris
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                itemCount: imageUrls.length,
-                itemBuilder: (context, index) {
-                  return Image.network(
-                    'http://172.24.161.222:5000/static/processed/1000000034.jpg',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Center(
-                        child: Text(
-                          'Failed to load image',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Expanded(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 2 gambar per baris
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                      ),
+                      itemCount: imageUrls.length,
+                      itemBuilder: (context, index) {
+                        print(imageUrls[index]);
+                        return Image.network(
+                          'http://172.24.161.222:5000/${imageUrls[index]}',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                'Failed to load image',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
