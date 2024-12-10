@@ -1,4 +1,6 @@
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/picture_cubit.dart';
+import 'package:face_count/features/beranda/splash_screen.dart';
 import 'package:face_count/services/acara_service.dart';
 import 'package:face_count/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,6 +51,11 @@ class MyApp extends StatelessWidget {
               RepositoryProvider.of<AcaraService>(context),
             ),
           ),
+          BlocProvider(
+            create: (context) => PictureCubit(
+              RepositoryProvider.of<AcaraService>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -59,15 +66,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             fontFamily: 'SFProDisplay',
           ),
-          home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const MainScreen();
-              }
-              return const LoginPage();
-            },
-          ),
+          home: SplashScreen(),
         ),
       ),
     );

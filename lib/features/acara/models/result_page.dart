@@ -1,17 +1,33 @@
+import 'dart:convert';
+
 import 'package:face_count/configs/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class ResultPage extends StatelessWidget {
-  final List<String> imageUrls; // URL gambar hasil olahan dari backend
+class ResultPage extends StatefulWidget {
+  final List<String> processedImageUrls;
   final int maleCount; // Jumlah male
   final int femaleCount; // Jumlah female
 
   const ResultPage({
     Key? key,
-    required this.imageUrls,
+    required this.processedImageUrls,
     required this.maleCount,
     required this.femaleCount,
   }) : super(key: key);
+
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  bool isLoading = true; // For showing loading state
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.processedImageUrls.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +75,11 @@ class ResultPage extends StatelessWidget {
                   tiles: [
                     ListTile(
                       leading: const Icon(Icons.male),
-                      title: Text("$maleCount orang"),
+                      title: Text("${widget.maleCount} orang"),
                     ),
                     ListTile(
                       leading: const Icon(Icons.female),
-                      title: Text('$femaleCount orang'),
+                      title: Text('${widget.femaleCount} orang'),
                     ),
                   ],
                 ).toList(),
@@ -75,6 +91,9 @@ class ResultPage extends StatelessWidget {
               style: regularTS.copyWith(fontSize: 18, color: neutral950),
             ),
             const SizedBox(height: 8.0),
+            // isLoading
+            //     ? Center(child: CircularProgressIndicator())
+            //     :
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -82,10 +101,11 @@ class ResultPage extends StatelessWidget {
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
                 ),
-                itemCount: imageUrls.length,
+                itemCount: widget.processedImageUrls.length,
                 itemBuilder: (context, index) {
+                  print(widget.processedImageUrls[index]);
                   return Image.network(
-                    'http://172.24.161.222:5000/static/processed/1000000034.jpg',
+                    'http://172.24.161.222:5000/${widget.processedImageUrls[index]}',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Center(

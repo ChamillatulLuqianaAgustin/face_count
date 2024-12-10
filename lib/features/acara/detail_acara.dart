@@ -1,18 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:face_count/features/acara/models/result_page.dart';
+import 'package:face_count/features/acara/result_scan.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
+import 'package:face_count/features/auth/cubit/picture_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
-import 'package:face_count/widgets/camera_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:multiple_image_camera/camera_file.dart';
+import 'package:multiple_image_camera/multiple_image_camera.dart';
 import '../../configs/theme.dart';
-import 'package:camera/camera.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
@@ -26,34 +27,23 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
-  final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
+  List<MediaModel>? imageList = [];
 
-  void selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
-      sendImages(selectedImages, context);
-    }
-    print("Image List Length:" + imageFileList!.length.toString());
-    setState(() {});
-  }
-
-  Future<void> sendImages(List<XFile> imageFiles, BuildContext context) async {
+  Future<void> sendImages(
+    BuildContext context, {
+    required List<MediaModel> images,
+  }) async {
     final uri = Uri.parse('http://172.24.161.222:5000/predict');
-    // final uri = Uri.parse('http://193.168.62.23:5000/predict');
-
     var request = http.MultipartRequest('POST', uri);
 
     try {
-      // Tambahkan setiap gambar ke request
-      for (var image in imageFiles) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'images', // Key yang sesuai dengan backend
-            image.path,
-          ),
+      for (var image in images) {
+        final file = File(image.file.path);
+        final multipartFile = await http.MultipartFile.fromPath(
+          'images', // Field name in the API
+          file.path,
         );
+        request.files.add(multipartFile);
       }
 
       // Kirim request
@@ -69,12 +59,13 @@ class _DetailAcaraState extends State<DetailAcara> {
         List<String> processedImageUrls =
             List<String>.from(decodedResponse['processed_images']);
 
+        context.read<PictureCubit>().addPicture(processedImageUrls, widget.acara.idAcara!);
         // Navigasi ke ResultPage
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ResultPage(
-              imageUrls: processedImageUrls,
+              processedImageUrls: processedImageUrls,
               maleCount: maleCount,
               femaleCount: femaleCount,
             ),
@@ -95,7 +86,7 @@ class _DetailAcaraState extends State<DetailAcara> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const ImageIcon(AssetImage('asset/icons/arrow_back.png'),
+            icon: const ImageIcon(AssetImage('assets/icons/arrow_back.png'),
                 color: neutral0),
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -395,9 +386,35 @@ class _DetailAcaraState extends State<DetailAcara> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                Text('Jumlah Pengunjung',
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Ringkasan',
                                     style: regularTS.copyWith(
-                                        fontSize: 18, color: Colors.black87)),
+                                      fontSize: 18,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ScanResultPage(), // Replace with your actual screen
+                                      ),
+                                    );
+                                    },
+                                    child: Text(
+                                      'Lihat Hasil Scan',
+                                      style: regularTS.copyWith(
+                                        fontSize: 14,
+                                        color: primaryBase,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                                 const SizedBox(height: 16),
                                 Container(
                                   decoration: BoxDecoration(
@@ -458,16 +475,17 @@ class _DetailAcaraState extends State<DetailAcara> {
         //   ),
         // ),
         bottomNavigationBar:
-            // (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
-            //         widget.acara.waktuSelesai!.isAfter(DateTime.now()))
-            /*?*/ Container(
+            (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+                     widget.acara.waktuSelesai!.isAfter(DateTime.now()))
+            ? Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           color: neutral0,
           child: GestureDetector(
-            onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => CameraScreen()));
-              selectImages();
+            onTap: () async {
+              await MultipleImageCamera.capture(context: context).then(
+                (images) => setState(() => imageList = images),
+              );
+              sendImages(context, images: imageList!);
             },
             child: Container(
               padding: const EdgeInsets.all(16),
@@ -495,7 +513,7 @@ class _DetailAcaraState extends State<DetailAcara> {
             ),
           ),
         )
-        // : null,
+        : null,
         );
   }
 }
