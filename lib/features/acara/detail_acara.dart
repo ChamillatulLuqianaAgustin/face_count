@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:face_count/features/acara/models/result_page.dart';
+import 'package:face_count/features/acara/result_scan.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/picture_cubit.dart';
@@ -385,9 +386,35 @@ class _DetailAcaraState extends State<DetailAcara> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                Text('Jumlah Pengunjung',
+                                Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Ringkasan',
                                     style: regularTS.copyWith(
-                                        fontSize: 18, color: Colors.black87)),
+                                      fontSize: 18,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ScanResultPage(), // Replace with your actual screen
+                                      ),
+                                    );
+                                    },
+                                    child: Text(
+                                      'Lihat Hasil Scan',
+                                      style: regularTS.copyWith(
+                                        fontSize: 14,
+                                        color: primaryBase,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                                 const SizedBox(height: 16),
                                 Container(
                                   decoration: BoxDecoration(
@@ -448,9 +475,9 @@ class _DetailAcaraState extends State<DetailAcara> {
         //   ),
         // ),
         bottomNavigationBar:
-            // (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
-            //         widget.acara.waktuSelesai!.isAfter(DateTime.now()))
-            /*?*/ Container(
+            (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+                     widget.acara.waktuSelesai!.isAfter(DateTime.now()))
+            ? Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           color: neutral0,
           child: GestureDetector(
@@ -486,7 +513,7 @@ class _DetailAcaraState extends State<DetailAcara> {
             ),
           ),
         )
-        // : null,
+        : null,
         );
   }
 }
