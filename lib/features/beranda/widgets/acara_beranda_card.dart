@@ -65,17 +65,33 @@ class AcaraBerandaCard extends StatelessWidget {
                       //     color: neutral100,
                       //   ),
                       // ),
+                      // child: Text(
+                      //   // Cek apakah tanggal acara sudah lewat atau belum
+                      //   (acaraModel.tanggalAcara?.isAfter(DateTime.now()) ??
+                      //           false)
+                      //       ? 'Akan Datang'
+                      //       : // Cek jika acara hari ini dan waktunya masih berlangsung
+                      //       (isSameDay(acaraModel.tanggalAcara!,
+                      //                   DateTime.now()) &&
+                      //               DateTime.now()
+                      //                   .isBefore(acaraModel.waktuSelesai!))
+                      //           ? 'Berlangsung'
+                      //           : 'Selesai',
+                      //   style: regularTS.copyWith(
+                      //     fontSize: 10,
+                      //     color: neutral100,
+                      //   ),
+                      // ),
                       child: Text(
-                        // Cek apakah tanggal acara sudah lewat atau belum
-                        (acaraModel.tanggalAcara?.isAfter(DateTime.now()) ??
-                                false)
-                            ? 'Akan Datang'
-                            : // Cek jika acara hari ini dan waktunya masih berlangsung
-                            (isSameDay(acaraModel.tanggalAcara!,
-                                        DateTime.now()) &&
-                                    DateTime.now()
-                                        .isBefore(acaraModel.waktuSelesai!))
-                                ? 'Berlangsung'
+                        // Cek apakah acara hari ini dan waktunya masih berlangsung
+                        (isSameDay(acaraModel.tanggalAcara!, DateTime.now()) &&
+                                DateTime.now()
+                                    .isBefore(acaraModel.waktuSelesai!))
+                            ? 'Berlangsung'
+                            : // Cek apakah acara di masa depan
+                            (acaraModel.tanggalAcara?.isAfter(DateTime.now()) ??
+                                    false)
+                                ? 'Akan Datang'
                                 : 'Selesai',
                         style: regularTS.copyWith(
                           fontSize: 10,
