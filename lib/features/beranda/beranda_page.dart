@@ -64,30 +64,30 @@ class _BerandaPageState extends State<BerandaPage> {
           ],
         ),
         // Notification Button
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      NotificationPage(), // Navigasi ke halaman Notifikasi
-                ),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: neutral100),
-              ),
-              child: Image.asset(
-                'assets/icons/notification_active.png',
-                width: 24,
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   GestureDetector(
+        //     onTap: () {
+        //       Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //           builder: (context) =>
+        //               NotificationPage(), // Navigasi ke halaman Notifikasi
+        //         ),
+        //       );
+        //     },
+        //     child: Container(
+        //       margin: const EdgeInsets.only(right: 8),
+        //       padding: const EdgeInsets.all(10),
+        //       decoration: BoxDecoration(
+        //         shape: BoxShape.circle,
+        //         border: Border.all(color: neutral100),
+        //       ),
+        //       child: Image.asset(
+        //         'assets/icons/notification_active.png',
+        //         width: 24,
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: BlocBuilder<AcaraCubit, AcaraState>(
         builder: (context, state) {

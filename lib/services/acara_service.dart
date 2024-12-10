@@ -11,9 +11,12 @@ class AcaraService {
   // Fetch all acara
   Future<List<AcaraModel>> getAcara() async {
     try {
+      final now = DateTime.now();
+      final todayStart = DateTime(now.year, now.month, now.day);
+
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
+          .where('waktu_mulai', isGreaterThanOrEqualTo: todayStart)
           .get();
       return snapshot.docs.map((document) {
         return AcaraModel.fromMap(document.data());
