@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:face_count/features/acara/models/result_page.dart';
+import 'package:face_count/features/acara/result_scan.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/features/auth/cubit/acara_cubit.dart';
 import 'package:face_count/features/auth/cubit/acara_state.dart';
@@ -482,9 +483,9 @@ class _DetailAcaraState extends State<DetailAcara> {
         //   ),
         // ),
         bottomNavigationBar:
-            // (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
-            //         widget.acara.waktuSelesai!.isAfter(DateTime.now()))
-            /*?*/ Container(
+            (isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+                     widget.acara.waktuSelesai!.isAfter(DateTime.now()))
+            ? Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           color: neutral0,
           child: GestureDetector(
@@ -519,7 +520,7 @@ class _DetailAcaraState extends State<DetailAcara> {
             ),
           ),
         )
-        // : null,
+        : null,
         );
   }
 }
