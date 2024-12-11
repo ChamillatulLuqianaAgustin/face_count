@@ -8,10 +8,10 @@ class AcaraCubit extends Cubit<AcaraState> {
   AcaraCubit(this._acara) : super(AcaraInitial());
 
   // Fetch acara list
-  Future<void> fetchAcara() async {
+  Future<void> fetchAcara(String userId) async {
     emit(AcaraLoading());
     try {
-      final listAcara = await _acara.getAcara('userId');
+      final listAcara = await _acara.getAcara(userId);
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -19,10 +19,10 @@ class AcaraCubit extends Cubit<AcaraState> {
   }
 
   // Fetch acara list selesai
-  Future<void> fetchAcaraSelesai() async {
+  Future<void> fetchAcaraSelesai(String userId) async {
     emit(AcaraLoading());
     try {
-      final listAcara = await _acara.getAcaraSelesai('userId');
+      final listAcara = await _acara.getAcaraSelesai(userId);
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -60,7 +60,7 @@ class AcaraCubit extends Cubit<AcaraState> {
       await _acara.addAcara(acara);
       print('Acara added: ${acara.namaAcara}, ${acara.tanggalAcara}');
       emit(AddAcaraSuccess());
-      fetchAcara(); // Fetch acara after adding new one
+      fetchAcara(acara.uid.toString()); // Fetch acara after adding new one
     } catch (e) {
       emit(AcaraError(e.toString()));
     }
@@ -72,7 +72,7 @@ class AcaraCubit extends Cubit<AcaraState> {
     try {
       await _acara.updateAcara(acara); // Panggil service untuk update
       print('Acara updated: ${acara.namaAcara}, ${acara.tanggalAcara}');
-      fetchAcara(); // Ambil ulang acara setelah update
+      fetchAcara(acara.uid.toString()); // Ambil ulang acara setelah update
       emit(UpdateAcaraSuccess()); // Emit success state
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -80,12 +80,12 @@ class AcaraCubit extends Cubit<AcaraState> {
   }
 
   // Delete acara
-  Future<void> deleteAcara(String idAcara) async {
+  Future<void> deleteAcara(String idAcara, String userId) async {
     emit(AcaraLoading());
     try {
       await _acara.deleteAcara(idAcara); // Panggil service untuk hapus
       print('Acara deleted: $idAcara');
-      fetchAcara(); // Ambil ulang acara setelah delete
+      fetchAcara(userId); // Ambil ulang acara setelah delete
       emit(DeleteAcaraSuccess()); // Emit success state
     } catch (e) {
       emit(AcaraError(e.toString()));

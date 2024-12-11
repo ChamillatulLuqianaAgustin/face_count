@@ -39,10 +39,12 @@ class AcaraService {
 // }
 
   Future<List<AcaraModel>> getAcara(String userId) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
     try {
       final snapshot = await acaraCollection
-          .where('userId.uid', isEqualTo: userId)
-          .where('waktu_mulai', isGreaterThanOrEqualTo: DateTime.now())
+          .where('uid', isEqualTo: userId)
+          .where('waktu_selesai', isGreaterThanOrEqualTo: today)
           .get();
 
       debugPrint(
@@ -60,7 +62,7 @@ class AcaraService {
   Future<List<AcaraModel>> getAcaraSelesai(String userId) async {
     try {
       final snapshot = await acaraCollection
-          .where('userId.uid', isEqualTo: userId)
+          .where('uid', isEqualTo: userId)
           .where('waktu_selesai', isLessThanOrEqualTo: DateTime.now())
           .get();
       return snapshot.docs.map((doc) {

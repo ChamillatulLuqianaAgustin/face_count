@@ -2,6 +2,7 @@ import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
 import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/features/riwayat/widgets/card_custom.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,13 +14,14 @@ class RiwayatPage extends StatefulWidget {
 }
 
 class _RiwayatPageState extends State<RiwayatPage> {
+  final user = FirebaseAuth.instance.currentUser;
   PageController pageController = PageController();
   int selectedPage = 0;
 
   @override
   void initState() {
     super.initState();
-    context.read<AcaraCubit>().fetchAcaraSelesai();
+    context.read<AcaraCubit>().fetchAcaraSelesai(user!.uid);
   }
 
   @override
