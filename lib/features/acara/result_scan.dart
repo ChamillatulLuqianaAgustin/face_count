@@ -119,7 +119,7 @@ class _ScanResultPageState extends State<ScanResultPage> {
                         itemCount: state.photosUrl.length,
                         itemBuilder: (context, index) {
                           return Image.network(
-                            'http://172.24.161.222:5000/${state.photosUrl[index]}',
+                            'http://103.161.185.147:5000/${state.photosUrl[index]}',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Center(
