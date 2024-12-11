@@ -37,7 +37,7 @@ class PictureCubit extends Cubit<PictureState> {
     required String idAcara,
     required List<MediaModel> images,
   }) async {
-    final uri = Uri.parse('http://172.24.161.222:5000/predict');
+    final uri = Uri.parse('http://172.23.0.2:5000/predict');
     var request = http.MultipartRequest('POST', uri);
 
     emit(PictureLoading());
