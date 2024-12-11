@@ -1,7 +1,6 @@
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/services/acara_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/acara_model.dart';
 import 'acara_state.dart';
 
 class AcaraCubit extends Cubit<AcaraState> {
@@ -12,7 +11,7 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> fetchAcara() async {
     emit(AcaraLoading());
     try {
-      final listAcara = await _acara.getAcara();
+      final listAcara = await _acara.getAcara('userId');
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -23,7 +22,7 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> fetchAcaraSelesai() async {
     emit(AcaraLoading());
     try {
-      final listAcara = await _acara.getAcaraSelesai();
+      final listAcara = await _acara.getAcaraSelesai('userId');
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -81,11 +80,11 @@ class AcaraCubit extends Cubit<AcaraState> {
   }
 
   // Delete acara
-  Future<void> deleteAcara(String id_acara) async {
+  Future<void> deleteAcara(String idAcara) async {
     emit(AcaraLoading());
     try {
-      await _acara.deleteAcara(id_acara); // Panggil service untuk hapus
-      print('Acara deleted: $id_acara');
+      await _acara.deleteAcara(idAcara); // Panggil service untuk hapus
+      print('Acara deleted: $idAcara');
       fetchAcara(); // Ambil ulang acara setelah delete
       emit(DeleteAcaraSuccess()); // Emit success state
     } catch (e) {
@@ -99,7 +98,7 @@ abstract class AcaraRepository {
   Future<List<AcaraModel>> getAcaraList();
   Future<void> createAcara(AcaraModel acara);
   Future<void> updateAcara(AcaraModel acara);
-  Future<void> deleteAcara(String id_acara);
+  Future<void> deleteAcara(String idAcara);
 }
 
 // lib/repository/acara_repository_impl.dart
@@ -137,17 +136,17 @@ class AcaraRepositoryImpl implements AcaraRepository {
   Future<void> updateAcara(AcaraModel acara) async {
     try {
       // Implement API call
-      // await _apiClient.put('/acara/${acara.id_acara}', data: acara.toJson());
+      // await _apiClient.put('/acara/${acara.idAcara}', data: acara.toJson());
     } catch (e) {
       throw Exception('Failed to update acara: $e');
     }
   }
 
   @override
-  Future<void> deleteAcara(String id_acara) async {
+  Future<void> deleteAcara(String idAcara) async {
     try {
       // Implement API call
-      // await _apiClient.delete('/acara/$id_acara');
+      // await _apiClient.delete('/acara/$idAcara');
     } catch (e) {
       throw Exception('Failed to delete acara: $e');
     }

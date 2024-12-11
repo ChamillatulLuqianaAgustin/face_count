@@ -1,7 +1,6 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/profil/change_password.dart';
 import 'package:face_count/features/profil/edit_profile.dart';
-import 'package:face_count/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,6 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
-  final _formKey = GlobalKey<FormState>();
   final user = FirebaseAuth.instance.currentUser;
   final isEventEmpty = false;
 
