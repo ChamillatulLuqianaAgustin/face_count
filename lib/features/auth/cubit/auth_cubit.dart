@@ -24,7 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         await _auth.updateDisplayName(name);
         await user.reload(); // Pastikan pengguna diperbarui
-        emit(Authenticated(userName: name, userId: user.uid));
+        emit(Authenticated(userName: name));
       } else {
         emit(AuthError(message: "User registration failed"));
       }
@@ -46,9 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
       if (user != null) {
-        emit(Authenticated(
-          userName: user.displayName ?? user.email ?? "User",
-          userId: user.uid)); 
+        emit(Authenticated(userName: user.displayName ?? user.email ?? "User"));
       } else {
         emit(AuthError(message: "User login failed"));
       }
