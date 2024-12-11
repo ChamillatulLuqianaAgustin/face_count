@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AcaraModel {
+  final String? uid;
   final String? idAcara;
   final String? namaAcara;
   final String? descAcara;
@@ -11,6 +12,7 @@ class AcaraModel {
   final int randColor;
 
   AcaraModel({
+    this.uid,
     this.idAcara,
     this.namaAcara,
     this.descAcara,
@@ -24,6 +26,7 @@ class AcaraModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'uid': uid,
       'id_acara': idAcara,
       'nama_acara': namaAcara,
       'desc_acara': descAcara,
@@ -37,6 +40,7 @@ class AcaraModel {
 
   factory AcaraModel.fromMap(Map<String, dynamic> map) {
     return AcaraModel(
+      uid: map['uid'],
       idAcara: map['id_acara'],
       namaAcara: map['nama_acara'],
       descAcara: map['desc_acara'],

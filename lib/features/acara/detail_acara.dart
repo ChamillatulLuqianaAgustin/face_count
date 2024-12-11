@@ -9,6 +9,7 @@ import 'package:face_count/features/acara/result_scan.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multiple_image_camera/camera_file.dart';
@@ -27,6 +28,7 @@ class DetailAcara extends StatefulWidget {
 }
 
 class _DetailAcaraState extends State<DetailAcara> {
+  final user = FirebaseAuth.instance.currentUser;
   List<MediaModel> imageList = [];
 
   @override
@@ -194,9 +196,10 @@ class _DetailAcaraState extends State<DetailAcara> {
                                                         // Lakukan penghapusan
                                                         await context
                                                             .read<AcaraCubit>()
-                                                            .deleteAcara(widget
-                                                                .acara
-                                                                .idAcara!);
+                                                            .deleteAcara(
+                                                                widget.acara
+                                                                    .idAcara!,
+                                                                user!.uid);
                                                         // Tutup dialog
                                                         Navigator.of(context)
                                                             .pop();

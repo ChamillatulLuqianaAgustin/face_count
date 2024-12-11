@@ -16,17 +16,16 @@ class BerandaPage extends StatefulWidget {
 }
 
 class _BerandaPageState extends State<BerandaPage> {
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    context.read<AcaraCubit>().fetchAcara();
     // context.read<PictureCubit>().fetchPicture();
     super.initState();
+    context.read<AcaraCubit>().fetchAcara(user!.uid);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
       // Appbar
       appBar: AppBar(
