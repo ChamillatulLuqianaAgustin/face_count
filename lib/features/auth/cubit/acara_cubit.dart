@@ -3,20 +3,16 @@ import 'package:face_count/services/acara_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/acara_model.dart';
 import 'acara_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AcaraCubit extends Cubit<AcaraState> {
   final AcaraService _acara;
-  final userId = FirebaseAuth.instance.currentUser?.uid;
   AcaraCubit(this._acara) : super(AcaraInitial());
 
   // Fetch acara list
   Future<void> fetchAcara() async {
     emit(AcaraLoading());
     try {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId == null) throw Exception("User not logged in!");
-      final listAcara = await _acara.getAcara(userId);
+      final listAcara = await _acara.getAcara();
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -27,9 +23,7 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> fetchAcaraSelesai() async {
     emit(AcaraLoading());
     try {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId == null) throw Exception("User not logged in!");
-      final listAcara = await _acara.getAcaraSelesai(userId);
+      final listAcara = await _acara.getAcaraSelesai();
       emit(AcaraLoaded(listAcara));
     } catch (e) {
       emit(AcaraError(e.toString()));
@@ -40,9 +34,7 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> getAcaraByDate(DateTime date) async {
     emit(AcaraLoading());
     try {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId == null) throw Exception("User not logged in!");
-      final acaraList = await _acara.getAcaraByDate(date, userId);
+      final acaraList = await _acara.getAcaraByDate(date);
       print(
           'Acara for ${date.toString()}: ${acaraList.length} found'); // Debug log
       emit(AcaraLoaded(acaraList));
