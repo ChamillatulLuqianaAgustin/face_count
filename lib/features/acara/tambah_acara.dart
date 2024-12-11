@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:face_count/features/auth/cubit/acara_cubit.dart';
-import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
 import 'package:flutter/material.dart';

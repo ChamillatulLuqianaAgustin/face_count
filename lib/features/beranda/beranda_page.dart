@@ -1,16 +1,12 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
-import 'package:face_count/features/auth/cubit/picture_cubit.dart';
 import 'package:face_count/utils/methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import '../acara/detail_acara.dart';
-
-import '../auth/cubit/acara_cubit.dart';
-import '../auth/cubit/acara_state.dart';
 import 'widgets/acara_beranda_card.dart';
-import 'widgets/notif_page.dart';
 
 class BerandaPage extends StatefulWidget {
   const BerandaPage({super.key});
@@ -23,7 +19,7 @@ class _BerandaPageState extends State<BerandaPage> {
   @override
   void initState() {
     context.read<AcaraCubit>().fetchAcara();
-    context.read<PictureCubit>().fetchPicture();
+    // context.read<PictureCubit>().fetchPicture();
     super.initState();
   }
 
@@ -50,8 +46,11 @@ class _BerandaPageState extends State<BerandaPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Selamat Pagi,',
-                    style: regularTS.copyWith(fontSize: 12),
+                    // 'Selamat Pagi,',
+                    // style: regularTS.copyWith(fontSize: 12),
+                    getGreeting(), // Panggil fungsi dari methods.dart
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
                   ),
                   const SizedBox(height: 2),
                   Text(
