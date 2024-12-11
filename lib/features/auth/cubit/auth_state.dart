@@ -13,10 +13,11 @@ class AuthLoading extends AuthState {}
 
 class Authenticated extends AuthState {
   final String userName;
-  const Authenticated({required this.userName});
+  final String userId;
+  const Authenticated({required this.userName, required this.userId});
 
   @override
-  List<Object> get props => [userName];
+  List<Object> get props => [userName, userId];
 }
 
 class AuthError extends AuthState {

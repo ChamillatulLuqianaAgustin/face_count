@@ -7,6 +7,7 @@ class AcaraModel {
   final DateTime? tanggalAcara;
   final DateTime? waktuMulai, waktuSelesai;
   final String? tempatAcara;
+  final String? userId;
   final int? jumlahPartisipan;
   final int randColor;
 
@@ -18,6 +19,7 @@ class AcaraModel {
     this.waktuMulai,
     this.waktuSelesai,
     this.tempatAcara,
+    this.userId,
     this.jumlahPartisipan,
     required this.randColor,
   });
@@ -30,12 +32,14 @@ class AcaraModel {
       'waktu_mulai': waktuMulai,
       'waktu_selesai': waktuSelesai,
       'tempat_acara': tempatAcara,
+      'user': {'uid': userId},
       'jumlah_partisipan': jumlahPartisipan,
       'rand_color': randColor,
     };
   }
 
   factory AcaraModel.fromMap(Map<String, dynamic> map) {
+    final userMap = map['userId'] as Map<String, dynamic>;
     return AcaraModel(
       idAcara: map['id_acara'],
       namaAcara: map['nama_acara'],
@@ -44,6 +48,7 @@ class AcaraModel {
       waktuSelesai: (map['waktu_selesai'] as Timestamp).toDate(),
       tanggalAcara: (map['waktu_mulai'] as Timestamp).toDate(),
       tempatAcara: map['tempat_acara'],
+      userId: userMap['uid'],
       jumlahPartisipan: map['jumlah_partisipan'],
       randColor: map['rand_color'],
     );
@@ -59,6 +64,7 @@ class AcaraModel {
     DateTime? waktuMulai,
     DateTime? waktuSelesai,
     String? tempatAcara,
+    String? userId,
     int? jumlahPartisipan,
     int? randColor,
   }) {
@@ -70,6 +76,7 @@ class AcaraModel {
       waktuSelesai: waktuSelesai ?? this.waktuSelesai,
       tanggalAcara: tanggalAcara ?? this.tanggalAcara,
       tempatAcara: tempatAcara ?? this.tempatAcara,
+      userId: userId ?? this.userId,
       jumlahPartisipan: jumlahPartisipan ?? this.jumlahPartisipan,
       randColor: randColor ?? this.randColor,
     );
