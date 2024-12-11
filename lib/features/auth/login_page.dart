@@ -1,5 +1,4 @@
 import 'package:face_count/configs/theme.dart';
-import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Selamat Datang! 👋🏻',
+                  'Selamat Datang! 👋',
                   style: mediumTS.copyWith(fontSize: 24, color: neutral950),
                   textAlign: TextAlign.center,
                 ),
@@ -92,14 +91,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       // Lupa password
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            );
-                        },
+                        onTap: () {},
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
