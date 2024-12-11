@@ -73,7 +73,7 @@ class AcaraService {
   }
 
   // Fetch acara by date
-  Future<List<AcaraModel>> getAcaraByDate(DateTime date, String userId) async {
+  Future<List<AcaraModel>> getAcaraByDate(DateTime date) async {
     debugPrint(
         'Fetching acara data for date: ${DateTime(date.year, date.month, date.day)}');
     try {
@@ -83,7 +83,6 @@ class AcaraService {
 
       final snapshot = await FirebaseFirestore.instance
           .collection('acara')
-          .where('userId.uid', isEqualTo: userId)
           .where('waktu_mulai', isGreaterThanOrEqualTo: startOfDay)
           .where('waktu_mulai', isLessThanOrEqualTo: endOfDay)
           .get();

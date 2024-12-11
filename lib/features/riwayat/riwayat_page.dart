@@ -44,24 +44,6 @@ class _RiwayatPageState extends State<RiwayatPage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is AcaraLoaded) {
-            if (state.acaraList.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/no_event.png'),
-                    Text(
-                      'Belum ada event yang tercatat.',
-                      style: mediumTS.copyWith(fontSize: 20),
-                    ),
-                    const Text(
-                      'Tambahkan event pertama kamu sekarang!',
-                      style: regularTS,
-                    )
-                  ],
-                ),
-              );
-            }
             // Urutkan berdasarkan tanggal (paling terbaru di atas)
             state.acaraList.sort((a, b) {
               final dateA = a.tanggalAcara ?? DateTime(0);
