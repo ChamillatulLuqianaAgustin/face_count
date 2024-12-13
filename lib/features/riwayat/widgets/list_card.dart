@@ -1,12 +1,10 @@
+import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/features/riwayat/widgets/card_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:face_count/features/acara/detail_acara.dart';
 import 'package:face_count/configs/theme.dart';
-
-import '../../auth/cubit/acara_cubit.dart';
-import '../../auth/cubit/acara_state.dart';
-import '../../beranda/widgets/acara_beranda_card.dart';
 
 class ListCard extends StatelessWidget {
   const ListCard({super.key});
