@@ -1,3 +1,4 @@
+import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -82,6 +83,15 @@ class AuthService {
       throw Exception(e.code);
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  Future<void> resetPassword(String email)async{
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    }
+    catch(e){
+      print(e.toString());
     }
   }
 }
