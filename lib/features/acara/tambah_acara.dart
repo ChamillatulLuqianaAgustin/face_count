@@ -1,8 +1,9 @@
 import 'dart:math';
-import 'package:face_count/features/auth/cubit/acara_cubit.dart';
-import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class TambahAcara extends StatefulWidget {
 }
 
 class _TambahAcaraState extends State<TambahAcara> {
+  final user = FirebaseAuth.instance.currentUser;
   final _namaAcaraController = TextEditingController();
   final _descAcaraController = TextEditingController();
   final _tempatAcaraController = TextEditingController();
@@ -168,6 +170,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       } else {
                         context.read<AcaraCubit>().addAcara(
                               acara: AcaraModel(
+                                uid: user!.uid,
                                 idAcara: generateUniqueIdAcara(10),
                                 namaAcara: _namaAcaraController.text,
                                 descAcara: _descAcaraController.text,

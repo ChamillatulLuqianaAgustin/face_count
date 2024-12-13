@@ -1,12 +1,9 @@
 import 'package:face_count/configs/theme.dart';
-import 'package:face_count/features/auth/cubit/acara_cubit.dart';
-import 'package:face_count/features/auth/cubit/acara_state.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
+import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/features/riwayat/widgets/card_custom.dart';
-import 'package:face_count/utils/methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:face_count/features/auth/cubit/acara_cubit.dart';
-import 'package:face_count/features/riwayat/widgets/list_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RiwayatPage extends StatefulWidget {
@@ -17,13 +14,14 @@ class RiwayatPage extends StatefulWidget {
 }
 
 class _RiwayatPageState extends State<RiwayatPage> {
+  final user = FirebaseAuth.instance.currentUser;
   PageController pageController = PageController();
   int selectedPage = 0;
 
   @override
   void initState() {
     super.initState();
-    context.read<AcaraCubit>().fetchAcaraSelesai();
+    context.read<AcaraCubit>().fetchAcaraSelesai(user!.uid);
   }
 
   @override
@@ -67,22 +65,6 @@ class _RiwayatPageState extends State<RiwayatPage> {
           return Container();
         },
       ),
-      // body: Stack(
-      //   children: [
-      //     PageView(
-      //       controller: pageController,
-      //       physics: const NeverScrollableScrollPhysics(),
-      //       onPageChanged: (value) => setState(() {
-      //         selectedPage = value;
-      //       }),
-      //       children: const [
-      //         ListCard(),
-      //         Center(child: Text('2')),
-      //         Center(child: Text('3')),
-      //       ],
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

@@ -1,7 +1,6 @@
 // lib/cubit/acara_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:face_count/models/acara_model.dart';
-import '../models/acara_model.dart';
 
 abstract class AcaraState extends Equatable {
   const AcaraState();

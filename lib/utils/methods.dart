@@ -27,3 +27,17 @@ String generateUniqueIdAcara(int length) {
   return List.generate(
       length, (index) => characters[random.nextInt(characters.length)]).join();
 }
+
+// Fungsi untuk mendapatkan sapaan berdasarkan waktu
+String getGreeting() {
+  final hour = DateTime.now().hour;
+  if (hour >= 5 && hour < 12) {
+    return 'Selamat Pagi,';
+  } else if (hour >= 12 && hour < 15) {
+    return 'Selamat Siang,';
+  } else if (hour >= 15 && hour < 18) {
+    return 'Selamat Sore,';
+  } else {
+    return 'Selamat Malam,';
+  }
+}
