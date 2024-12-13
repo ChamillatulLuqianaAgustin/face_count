@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Bagian Form Login
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -85,7 +86,15 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Masukkan password',
+                        isPassword: true,
+                        isPasswordVisible: _isPasswordVisible,
+                        togglePasswordVisibility: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                       ),
+
 
                       const SizedBox(height: 24),
 
