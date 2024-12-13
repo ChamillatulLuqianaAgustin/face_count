@@ -93,6 +93,7 @@ class _EditProfileState extends State<EditProfile> {
                   backgroundColor: yellow50,
                   backgroundImage: AssetImage('assets/images/memoji.png'),
                 ),
+                
               ],
             ),
           ),
