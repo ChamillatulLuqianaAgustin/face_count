@@ -93,18 +93,7 @@ class _EditProfileState extends State<EditProfile> {
                   backgroundColor: yellow50,
                   backgroundImage: AssetImage('assets/images/memoji.png'),
                 ),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: primaryBase,
-                  ),
-                  child: Image.asset(
-                    'assets/icons/camera.png',
-                    color: neutral0,
-                    width: 24,
-                  ),
-                ),
+                
               ],
             ),
           ),
