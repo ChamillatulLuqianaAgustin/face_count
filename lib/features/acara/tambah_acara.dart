@@ -98,7 +98,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                           ? widget.acara!.namaAcara.toString()
                           : 'Masukkan nama acara',
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 16), 
                     CustomTextField(
                       controller: _descAcaraController,
                       label: 'Deskripsi Singkat',
@@ -140,6 +140,37 @@ class _TambahAcaraState extends State<TambahAcara> {
                 : CustomButton(
                     text: widget.isEditMode ? 'Simpan' : 'Buat',
                     onTap: () {
+                      if (_namaAcaraController.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Nama acara tidak boleh kosong')),
+                      );
+                      return;
+                      }
+                      if (_descAcaraController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Deskripsi acara tidak boleh kosong')),
+                        );
+                        return;
+                      }
+                      if (_selectedDate == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Tanggal acara harus dipilih')),
+                        );
+                        return;
+                      }
+                      if (_tempatAcaraController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Tempat acara tidak boleh kosong')),
+                        );
+                        return;
+                      }
+                      if (_jumlahPartisipanController.text.trim().isEmpty ||
+                          int.tryParse(_jumlahPartisipanController.text) == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Jumlah partisipan harus valid')),
+                        );
+                        return;
+                      }
                       if (widget.isEditMode) {
                         context.read<AcaraCubit>().updateAcara(
                               AcaraModel(
