@@ -1,4 +1,5 @@
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Selamat Datang! 👋',
+                  'Selamat Datang! 👋🏻',
                   style: mediumTS.copyWith(fontSize: 24, color: neutral950),
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Bagian Form Login
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -85,13 +87,28 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Masukkan password',
+                        isPassword: true,
+                        isPasswordVisible: _isPasswordVisible,
+                        togglePasswordVisibility: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                       ),
+
 
                       const SizedBox(height: 24),
 
                       // Lupa password
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage(),
+                              ),
+                            );
+                        },
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(

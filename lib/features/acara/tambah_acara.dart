@@ -144,6 +144,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                         context.read<AcaraCubit>().updateAcara(
                               AcaraModel(
                                 idAcara: widget.acara!.idAcara,
+                                userId: user!.uid,
                                 namaAcara: _namaAcaraController.text,
                                 descAcara: _descAcaraController.text,
                                 waktuMulai: DateTime(
@@ -170,7 +171,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       } else {
                         context.read<AcaraCubit>().addAcara(
                               acara: AcaraModel(
-                                uid: user!.uid,
+                                userId: user!.uid,
                                 idAcara: generateUniqueIdAcara(10),
                                 namaAcara: _namaAcaraController.text,
                                 descAcara: _descAcaraController.text,
