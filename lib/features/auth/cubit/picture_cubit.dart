@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
-import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/services/acara_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
