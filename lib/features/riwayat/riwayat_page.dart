@@ -52,7 +52,10 @@ class _RiwayatPageState extends State<RiwayatPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/no_event.png'),
+                    Image.asset(
+                      'assets/images/Empty_Riwayat.png',
+                      scale: 3,
+                    ),
                     Text(
                       'Belum ada event yang tercatat.',
                       style: mediumTS.copyWith(fontSize: 20),

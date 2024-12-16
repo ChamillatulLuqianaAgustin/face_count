@@ -21,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _namaController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -94,6 +95,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Masukkan password',
+                        isPassword: true,
+                        isPasswordVisible: _isPasswordVisible,
+                        togglePasswordVisibility: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                       ),
                       const SizedBox(height: 24),
                       state is AuthLoading
@@ -101,10 +109,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           : CustomButton(
                               text: 'Register',
                               onTap: () => context.read<AuthCubit>().register(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                                name: _namaController.text,
-                              ),
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    name: _namaController.text,
+                                  ),
                             ),
                     ],
                   ),
@@ -116,7 +124,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       TextSpan(
                         text: 'Login',
-                        style: regularTS.copyWith(fontSize: 16, color: primaryBase),
+                        style: regularTS.copyWith(
+                            fontSize: 16, color: primaryBase),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Navigator.push(
