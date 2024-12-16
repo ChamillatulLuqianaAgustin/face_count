@@ -44,25 +44,30 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
         },
         builder: (context, state) {
           return Scaffold(
-            body: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                // Logo dan Judul
-                Image.asset(
-                  'assets/images/logo.png',
-                  height: 60,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/arrow_back.png'),
+                  color: neutral950,
                 ),
-                const SizedBox(height: 8),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            body: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 2, 16, 16),
+              children: [
                 Text(
                   'Lupa Password?',
                   style: mediumTS.copyWith(fontSize: 24, color: neutral950),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Atur ulang kata sandi akun Anda',
                   style: regularTS.copyWith(fontSize: 16, color: neutral400),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
 
@@ -93,8 +98,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                                 if (email.isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Email tidak boleh kosong'),
+                                      content: Text('Email tidak boleh kosong'),
                                     ),
                                   );
                                   return;
@@ -123,35 +127,6 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                             ),
                     ],
                   ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Teks Navigasi ke Login
-                Text.rich(
-                  TextSpan(
-                    text: 'Ingat kata sandi Anda? ',
-                    children: [
-                      TextSpan(
-                        text: 'Login',
-                        style: regularTS.copyWith(
-                          fontSize: 16,
-                          color: primaryBase,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ),
-                            );
-                          },
-                      ),
-                    ],
-                  ),
-                  style: regularTS.copyWith(fontSize: 16, color: neutral400),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
