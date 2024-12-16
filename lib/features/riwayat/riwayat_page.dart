@@ -5,7 +5,6 @@ import 'package:face_count/features/riwayat/widgets/card_custom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:face_count/features/riwayat/widgets/list_card.dart';
 
 class RiwayatPage extends StatefulWidget {
   const RiwayatPage({Key? key}) : super(key: key);

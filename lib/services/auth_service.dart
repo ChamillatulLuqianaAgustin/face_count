@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {

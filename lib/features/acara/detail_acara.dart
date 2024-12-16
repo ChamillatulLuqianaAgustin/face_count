@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:face_count/features/acara/cubit/acara/acara_cubit.dart';
 import 'package:face_count/features/acara/cubit/acara/acara_state.dart';
 import 'package:face_count/features/acara/cubit/picture/picture_cubit.dart';
@@ -15,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multiple_image_camera/camera_file.dart';
 import 'package:multiple_image_camera/multiple_image_camera.dart';
 import '../../configs/theme.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 // import 'package:face_count/features/acara/scan_pengunjung.dart';
 
@@ -474,18 +471,74 @@ class _DetailAcaraState extends State<DetailAcara> {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                     color: neutral0,
                     child: state is PictureLoading
-                        ? Text('Uploading Picture...')
+                        // ? Text('Uploading Picture...')
+                        // : GestureDetector(
+                        //     onTap: () async {
+                        //       await MultipleImageCamera.capture(
+                        //               context: context)
+                        //           .then(
+                        //         (images) => setState(() => imageList = images),
+                        //       );
+                        //       context.read<PictureCubit>().sendImages(
+                        //             idAcara: widget.acara.idAcara.toString(),
+                        //             images: imageList,
+                        //           );
+                        //     },
+                        ? Builder(
+                            builder: (context) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    primaryBase),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Text('Mengunggah Hasil Scan',
+                                              style: mediumTS.copyWith(
+                                                fontSize: 16,
+                                                color: neutral950,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+                              return SizedBox
+                                  .shrink(); // Tidak menampilkan elemen lain
+                            },
+                          )
                         : GestureDetector(
                             onTap: () async {
                               await MultipleImageCamera.capture(
                                       context: context)
-                                  .then(
-                                (images) => setState(() => imageList = images),
-                              );
-                              context.read<PictureCubit>().sendImages(
+                                  .then((images) =>
+                                      setState(() => imageList = images));
+                              context
+                                  .read<PictureCubit>()
+                                  .sendImages(
                                     idAcara: widget.acara.idAcara.toString(),
                                     images: imageList,
-                                  );
+                                  )
+                                  .then((_) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(); // Menutup dialog
+                              }).catchError((_) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(); // Menutup dialog jika ada error
+                              });
                             },
                             child: Container(
                               padding: const EdgeInsets.all(16),
