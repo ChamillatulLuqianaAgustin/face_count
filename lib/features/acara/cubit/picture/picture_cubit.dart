@@ -18,6 +18,7 @@ class PictureCubit extends Cubit<PictureState> {
           .collection('acara')
           .doc(idAcara)
           .collection('photos')
+          .orderBy('timestamp', descending: true) // Sort by timestamp
           .get();
 
       List<String> photoUrls = [];
@@ -94,17 +95,21 @@ class PictureCubit extends Cubit<PictureState> {
           FirebaseFirestore.instance.collection('acara').doc(idAcara);
 
       await acaraDoc.update({
-        'male': maleCount,
-        'female': femaleCount,
+        'male': FieldValue.increment(maleCount),
+        'female': FieldValue.increment(femaleCount),
       });
 
       CollectionReference acaraPhotosCollection = acaraDoc.collection('photos');
 
       for (String image in imagesUrls) {
-        await acaraPhotosCollection.add({'url': image});
+        await acaraPhotosCollection.add({
+          'url': image,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
       }
-      emit(PictureAddSuccess());
+      emit(PictureAddSuccess(male: maleCount, female: femaleCount));
     } catch (e) {
+      print(e);
       emit(PictureError(e.toString()));
     }
   }
