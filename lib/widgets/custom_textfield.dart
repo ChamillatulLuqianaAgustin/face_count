@@ -32,7 +32,7 @@ class CustomTextField extends StatelessWidget {
           style: regularTS.copyWith(fontSize: 16),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: controller,
           keyboardType: keyboardType,
           obscureText: isPassword && !isPasswordVisible,
@@ -61,6 +61,12 @@ class CustomTextField extends StatelessWidget {
                   )
                 : null,
           ),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Field tidak boleh kosong';
+            }
+            return null;
+          },
         ),
       ],
     );

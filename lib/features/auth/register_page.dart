@@ -107,11 +107,40 @@ class _RegisterPageState extends State<RegisterPage> {
                           ? const CustomLoadingButton()
                           : CustomButton(
                               text: 'Register',
-                              onTap: () => context.read<AuthCubit>().register(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                    name: _namaController.text,
-                                  ),
+                              onTap: () {
+                                if(_namaController.text.trim().isEmpty){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Nama tidak boleh kosong')),
+                                  );
+                                  return;
+                                } 
+                                if (_emailController.text.trim().isEmpty ||
+                                    !_emailController.text.contains('@')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Masukkan alamat email yang valid')),
+                                  );
+                                  return;
+                                } 
+                                if (_passwordController.text
+                                    .trim()
+                                    .isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Password tidak boleh kosong')),
+                                  );
+                                  return;
+                                } 
+                                else {
+                                  context.read<AuthCubit>().register(
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                        name: _namaController.text,
+                                      );
+                                }
+                              }
                             ),
                     ],
                   ),

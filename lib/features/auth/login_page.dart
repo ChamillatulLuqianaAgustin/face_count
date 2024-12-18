@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:flutter/gestures.dart';
@@ -40,7 +41,10 @@ class _LoginPageState extends State<LoginPage> {
             );
           }
           if (state is AuthError) {
-            print(state.message);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(state.message), // Pesan error dari AuthCubit
+              backgroundColor: redBase, // Warna merah untuk indikasi error
+            ));
           }
         },
         builder: (context, state) {
@@ -96,18 +100,17 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
 
-
                       const SizedBox(height: 24),
 
                       // Lupa password
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            );
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPasswordPage(),
+                            ),
+                          );
                         },
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -128,11 +131,30 @@ class _LoginPageState extends State<LoginPage> {
                           ? const CustomLoadingButton()
                           : CustomButton(
                               text: 'Login',
-                              onTap: () => context.read<AuthCubit>().login(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  ),
-                            ),
+                              onTap: () {
+                                if (_emailController.text.trim().isEmpty ||
+                                    !_emailController.text.contains('@')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Masukkan alamat email yang valid')),
+                                  );
+                                  return;
+                                } else if (_passwordController.text
+                                    .trim()
+                                    .isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Password tidak boleh kosong')),
+                                  );
+                                  return;
+                                } else {
+                                  context.read<AuthCubit>().login(
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                      );
+                                }
+                              }),
                     ],
                   ),
                 ),
