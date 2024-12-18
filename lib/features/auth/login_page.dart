@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face_count/configs/theme.dart';
+import 'package:face_count/features/auth/forgot_password_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -38,7 +41,10 @@ class _LoginPageState extends State<LoginPage> {
             );
           }
           if (state is AuthError) {
-            print(state.message);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(state.message), // Pesan error dari AuthCubit
+              backgroundColor: redBase, // Warna merah untuk indikasi error
+            ));
           }
         },
         builder: (context, state) {
@@ -53,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Selamat Datang! 👋',
+                  'Selamat Datang! 👋🏻',
                   style: mediumTS.copyWith(fontSize: 24, color: neutral950),
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Bagian Form Login
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -85,13 +91,27 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Masukkan password',
+                        isPassword: true,
+                        isPasswordVisible: _isPasswordVisible,
+                        togglePasswordVisibility: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
                       ),
 
                       const SizedBox(height: 24),
 
                       // Lupa password
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPasswordPage(),
+                            ),
+                          );
+                        },
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
@@ -111,11 +131,30 @@ class _LoginPageState extends State<LoginPage> {
                           ? const CustomLoadingButton()
                           : CustomButton(
                               text: 'Login',
-                              onTap: () => context.read<AuthCubit>().login(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  ),
-                            ),
+                              onTap: () {
+                                if (_emailController.text.trim().isEmpty ||
+                                    !_emailController.text.contains('@')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Masukkan alamat email yang valid')),
+                                  );
+                                  return;
+                                } else if (_passwordController.text
+                                    .trim()
+                                    .isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Password tidak boleh kosong')),
+                                  );
+                                  return;
+                                } else {
+                                  context.read<AuthCubit>().login(
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                      );
+                                }
+                              }),
                     ],
                   ),
                 ),

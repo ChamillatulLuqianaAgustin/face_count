@@ -1,12 +1,20 @@
 import 'package:face_count/configs/theme.dart';
 import 'package:face_count/features/acara/cubit/picture/picture_cubit.dart';
 import 'package:face_count/features/acara/cubit/picture/picture_state.dart';
+import 'package:face_count/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScanResultPage extends StatefulWidget {
   final String idAcara;
-  const ScanResultPage({super.key, required this.idAcara});
+  final int male;
+  final int female;
+  const ScanResultPage({
+    super.key,
+    required this.idAcara,
+    required this.male,
+    required this.female,
+  });
   @override
   State<ScanResultPage> createState() => _ScanResultPageState();
 }
@@ -47,7 +55,10 @@ class _ScanResultPageState extends State<ScanResultPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/no_event.png'),
+                      Image.asset(
+                        'assets/images/Empty_Acara.png',
+                        scale: 3,
+                      ),
                       Text(
                         'Belum ada hasil scan yang tercatat.',
                         style: mediumTS.copyWith(fontSize: 20),
@@ -88,11 +99,11 @@ class _ScanResultPageState extends State<ScanResultPage> {
                           tiles: [
                             ListTile(
                               leading: const Icon(Icons.male),
-                              title: const Text('70 orang'),
+                              title: Text('${widget.male} orang'),
                             ),
                             ListTile(
                               leading: const Icon(Icons.female),
-                              title: const Text('30 orang'),
+                              title: Text('${widget.female} orang'),
                             ),
                           ],
                         ).toList(),
@@ -118,17 +129,48 @@ class _ScanResultPageState extends State<ScanResultPage> {
                         ),
                         itemCount: state.photosUrl.length,
                         itemBuilder: (context, index) {
-                          return Image.network(
-                            'http://103.161.185.147:5000/${state.photosUrl[index]}',
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                child: Text(
-                                  'Failed to load image',
-                                  style: TextStyle(color: Colors.red),
-                                ),
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    content: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: Image.network(
+                                        'http://103.161.185.147:5000/${state.photosUrl[index]}',
+                                      ),
+                                    ),
+                                    actions: [
+                                      CustomButton(
+                                        text: 'Tutup',
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
+                            child: Image.network(
+                              'http://103.161.185.147:5000/${state.photosUrl[index]}',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Text(
+                                    'Failed to load image',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
                       ),

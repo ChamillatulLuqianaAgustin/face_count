@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -83,5 +84,29 @@ class AuthService {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  Future<void> resetPassword(String email)async{
+     if (email.isEmpty) {
+    throw Exception("Email tidak boleh kosong");
+  }
+
+  try {
+    // Periksa apakah email terdaftar di Firestore
+    final QuerySnapshot query = await FirebaseFirestore.instance
+        .collection('users')
+        .where("email", isEqualTo: email)
+        .get();
+
+    if (query.docs.isEmpty) {
+      throw Exception("Email tidak terdaftar");
+    }
+
+    // Kirim email reset password
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  } catch (e) {
+    // Tangani error
+    throw Exception("Gagal mengirim email reset password: ${e.toString()}");
+  }
   }
 }

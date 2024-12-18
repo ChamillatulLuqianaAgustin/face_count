@@ -2,15 +2,19 @@ import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/services/acara_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'acara_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AcaraCubit extends Cubit<AcaraState> {
   final AcaraService _acara;
+  // final userId = FirebaseAuth.instance.currentUser?.uid;
   AcaraCubit(this._acara) : super(AcaraInitial());
 
   // Fetch acara list
   Future<void> fetchAcara(String userId) async {
     emit(AcaraLoading());
     try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) throw Exception("User not logged in!");
       final listAcara = await _acara.getAcara(userId);
       emit(AcaraLoaded(listAcara));
     } catch (e) {
@@ -22,6 +26,8 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> fetchAcaraSelesai(String userId) async {
     emit(AcaraLoading());
     try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) throw Exception("User not logged in!");
       final listAcara = await _acara.getAcaraSelesai(userId);
       emit(AcaraLoaded(listAcara));
     } catch (e) {
@@ -33,7 +39,9 @@ class AcaraCubit extends Cubit<AcaraState> {
   Future<void> getAcaraByDate(DateTime date) async {
     emit(AcaraLoading());
     try {
-      final acaraList = await _acara.getAcaraByDate(date);
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) throw Exception("User not logged in!");
+      final acaraList = await _acara.getAcaraByDate(date, userId);
       print(
           'Acara for ${date.toString()}: ${acaraList.length} found'); // Debug log
       emit(AcaraLoaded(acaraList));
@@ -60,7 +68,7 @@ class AcaraCubit extends Cubit<AcaraState> {
       await _acara.addAcara(acara);
       print('Acara added: ${acara.namaAcara}, ${acara.tanggalAcara}');
       emit(AddAcaraSuccess());
-      fetchAcara(acara.uid.toString()); // Fetch acara after adding new one
+      fetchAcara(acara.userId.toString()); // Fetch acara after adding new one
     } catch (e) {
       emit(AcaraError(e.toString()));
     }
@@ -72,7 +80,7 @@ class AcaraCubit extends Cubit<AcaraState> {
     try {
       await _acara.updateAcara(acara); // Panggil service untuk update
       print('Acara updated: ${acara.namaAcara}, ${acara.tanggalAcara}');
-      fetchAcara(acara.uid.toString()); // Ambil ulang acara setelah update
+      fetchAcara(acara.userId.toString()); // Ambil ulang acara setelah update
       emit(UpdateAcaraSuccess()); // Emit success state
     } catch (e) {
       emit(AcaraError(e.toString()));

@@ -7,12 +7,19 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String label;
   final String hint;
+  final bool isPassword;
+  final bool isPasswordVisible;
+  final VoidCallback? togglePasswordVisibility;
+
   const CustomTextField({
     super.key,
     required this.controller,
     this.keyboardType = TextInputType.text,
     required this.label,
     required this.hint,
+    this.isPassword = false,
+    this.isPasswordVisible = false,
+    this.togglePasswordVisibility,
   });
 
   @override
@@ -25,9 +32,10 @@ class CustomTextField extends StatelessWidget {
           style: regularTS.copyWith(fontSize: 16),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          obscureText: isPassword && !isPasswordVisible,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: regularTS.copyWith(fontSize: 16, color: neutral400),
@@ -44,7 +52,21 @@ class CustomTextField extends StatelessWidget {
               borderSide: const BorderSide(color: primaryBase),
             ),
             contentPadding: const EdgeInsets.all(16),
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: togglePasswordVisibility,
+                  )
+                : null,
           ),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Field tidak boleh kosong';
+            }
+            return null;
+          },
         ),
       ],
     );

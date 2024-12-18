@@ -99,7 +99,10 @@ class _BerandaPageState extends State<BerandaPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/no_event.png'),
+                    Image.asset(
+                      'assets/images/Empty_Acara.png',
+                      scale: 3,
+                    ),
                     Text(
                       'Belum ada event yang tercatat.',
                       style: mediumTS.copyWith(fontSize: 20),
