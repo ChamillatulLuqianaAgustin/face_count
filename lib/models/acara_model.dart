@@ -9,6 +9,8 @@ class AcaraModel {
   final String? tempatAcara;
   String? userId;
   final int? jumlahPartisipan;
+  int? male;
+  int? female;
   final int randColor;
 
   AcaraModel({
@@ -21,6 +23,8 @@ class AcaraModel {
     this.tempatAcara,
     this.userId,
     this.jumlahPartisipan,
+    this.male,
+    this.female,
     required this.randColor,
   });
 
@@ -34,6 +38,8 @@ class AcaraModel {
       'tempat_acara': tempatAcara,
       'userId': {'uid': userId},
       'jumlah_partisipan': jumlahPartisipan,
+      'male': 0,
+      'female': 0,
       'rand_color': randColor,
     };
   }
@@ -50,6 +56,8 @@ class AcaraModel {
       tempatAcara: map['tempat_acara'],
       userId: userMap['uid'],
       jumlahPartisipan: map['jumlah_partisipan'],
+      male: map['male'],
+      female: map['female'],
       randColor: map['rand_color'],
     );
   }
@@ -66,6 +74,8 @@ class AcaraModel {
     String? tempatAcara,
     String? userId,
     int? jumlahPartisipan,
+    int? male,
+    int? female,
     int? randColor,
   }) {
     return AcaraModel(
@@ -78,6 +88,8 @@ class AcaraModel {
       tempatAcara: tempatAcara ?? this.tempatAcara,
       userId: userId ?? this.userId,
       jumlahPartisipan: jumlahPartisipan ?? this.jumlahPartisipan,
+      male: male ?? this.male,
+      female: female ?? this.female,
       randColor: randColor ?? this.randColor,
     );
   }

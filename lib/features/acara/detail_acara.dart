@@ -6,6 +6,7 @@ import 'package:face_count/features/acara/result_scan.dart';
 import 'package:face_count/features/acara/tambah_acara.dart';
 import 'package:face_count/models/acara_model.dart';
 import 'package:face_count/utils/methods.dart';
+import 'package:face_count/widgets/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,17 +31,57 @@ class _DetailAcaraState extends State<DetailAcara> {
 
   @override
   Widget build(BuildContext context) {
+    bool acaraBelumMulai =
+        isSameDay(widget.acara.tanggalAcara!, DateTime.now()) &&
+            widget.acara.waktuSelesai!.isAfter(DateTime.now());
+
     return BlocProvider(
       create: (context) => PictureCubit(),
       child: BlocConsumer<PictureCubit, PictureState>(
         listener: (context, state) {
+          if (state is PictureLoading) {
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(primaryBase),
+                      ),
+                      const SizedBox(height: 20),
+                      Text('Mengunggah Hasil Scan',
+                          style: mediumTS.copyWith(
+                            fontSize: 16,
+                            color: neutral950,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
           if (state is PictureAddSuccess) {
-            Navigator.push(
-              context,
+            Navigator.of(context).pop(); // Close loading
+
+            setState(() {
+              widget.acara.male = (widget.acara.male ?? 0) + state.male;
+              widget.acara.female = (widget.acara.female ?? 0) + state.female;
+            });
+
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => ScanResultPage(
                   idAcara: widget.acara.idAcara.toString(),
-                ), // Replace with your actual screen
+                  male: widget.acara.male ?? 0,
+                  female: widget.acara.female ?? 0,
+                ),
               ),
             );
           }
@@ -391,6 +432,9 @@ class _DetailAcaraState extends State<DetailAcara> {
                                                     ScanResultPage(
                                                   idAcara: widget.acara.idAcara
                                                       .toString(),
+                                                  male: widget.acara.male ?? 0,
+                                                  female:
+                                                      widget.acara.female ?? 0,
                                                 ), // Replace with your actual screen
                                               ),
                                             );
@@ -423,11 +467,13 @@ class _DetailAcaraState extends State<DetailAcara> {
                                           tiles: [
                                             ListTile(
                                               leading: const Icon(Icons.male),
-                                              title: const Text('70 orang'),
+                                              title: Text(
+                                                  '${widget.acara.male ?? 0} orang'),
                                             ),
                                             ListTile(
                                               leading: const Icon(Icons.female),
-                                              title: const Text('30 orang'),
+                                              title: Text(
+                                                  '${widget.acara.female ?? 0} orang'),
                                             ),
                                           ],
                                         ).toList(),
@@ -445,128 +491,39 @@ class _DetailAcaraState extends State<DetailAcara> {
                 ),
               ],
             ),
-            // bottomNavigationBar: Container(
-            //   padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            //   color: neutral0,
-            //   child: GestureDetector(
-            //     onTap: () async {
-            //       await ImagePicker().pickImage(source: ImageSource.camera);
-            //     },
-            //     // icon: const Icon(Icons.camera_alt, color: neutral0),
-            //     // label: Text(
-            //     //   'Scan Pengunjung',
-            //     //   style: mediumTS.copyWith(color: neutral0),
-            //     // ),
-            //     // style: ElevatedButton.styleFrom(
-            //     //   backgroundColor: primaryBase,
-            //     //   minimumSize: const Size(double.infinity, 48),
-            //     // ),
+            bottomNavigationBar: Container(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              color: neutral0,
+              child: CustomButton(
+                text: 'Scan Pengunjung',
+                icon: ImageIcon(
+                  AssetImage('assets/icons/camera.png'),
+                  color: neutral0,
+                ),
+                disabled: !acaraBelumMulai || state is PictureLoading,
+                onTap: () async {
+                  final images =
+                      await MultipleImageCamera.capture(context: context);
 
-            //   ),
-            // ),
-            bottomNavigationBar: (isSameDay(
-                        widget.acara.tanggalAcara!, DateTime.now()) &&
-                    widget.acara.waktuSelesai!.isAfter(DateTime.now()))
-                ? Container(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    color: neutral0,
-                    child: state is PictureLoading
-                        // ? Text('Uploading Picture...')
-                        // : GestureDetector(
-                        //     onTap: () async {
-                        //       await MultipleImageCamera.capture(
-                        //               context: context)
-                        //           .then(
-                        //         (images) => setState(() => imageList = images),
-                        //       );
-                        //       context.read<PictureCubit>().sendImages(
-                        //             idAcara: widget.acara.idAcara.toString(),
-                        //             images: imageList,
-                        //           );
-                        //     },
-                        ? Builder(
-                            builder: (context) {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => Dialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    primaryBase),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Text('Mengunggah Hasil Scan',
-                                              style: mediumTS.copyWith(
-                                                fontSize: 16,
-                                                color: neutral950,
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
-                              return SizedBox
-                                  .shrink(); // Tidak menampilkan elemen lain
-                            },
-                          )
-                        : GestureDetector(
-                            onTap: () async {
-                              await MultipleImageCamera.capture(
-                                      context: context)
-                                  .then((images) =>
-                                      setState(() => imageList = images));
-                              context
-                                  .read<PictureCubit>()
-                                  .sendImages(
-                                    idAcara: widget.acara.idAcara.toString(),
-                                    images: imageList,
-                                  )
-                                  .then((_) {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop(); // Menutup dialog
-                              }).catchError((_) {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop(); // Menutup dialog jika ada error
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: primaryBase,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/icons/media.png',
-                                    color: neutral0,
-                                    width: 24,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Scan Pengunjung',
-                                    style: mediumTS.copyWith(
-                                      color: neutral0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                  )
-                : null,
+                  if (images.isNotEmpty) {
+                    setState(() => imageList = images);
+                    context
+                        .read<PictureCubit>()
+                        .sendImages(
+                          idAcara: widget.acara.idAcara.toString(),
+                          images: imageList,
+                        )
+                        .then((_) {
+                      // Menutup dialog
+                      Navigator.of(context).pop();
+                    }).catchError((_) {
+                      // Menutup dialog jika ada error
+                      Navigator.of(context).pop();
+                    });
+                  }
+                },
+              ),
+            ),
           );
         },
       ),

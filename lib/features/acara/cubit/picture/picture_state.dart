@@ -25,7 +25,14 @@ class PictureScanSuccess extends PictureState {
   List<Object?> get props => [maleCount, femaleCount, urls];
 }
 
-class PictureAddSuccess extends PictureState {}
+class PictureAddSuccess extends PictureState {
+  final int male;
+  final int female;
+  const PictureAddSuccess({required this.male, required this.female});
+
+  @override
+  List<Object?> get props => [male, female];
+}
 
 class PictureLoaded extends PictureState {
   final List<String> photosUrl;
