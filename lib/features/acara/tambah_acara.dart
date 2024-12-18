@@ -97,6 +97,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       hint: widget.isEditMode
                           ? widget.acara!.namaAcara.toString()
                           : 'Masukkan nama acara',
+                      isRequired: true,
                     ),
                     const SizedBox(height: 16), 
                     CustomTextField(
@@ -105,6 +106,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       hint: widget.isEditMode
                           ? widget.acara!.descAcara.toString()
                           : 'Masukkan deskripsi acara',
+                      isRequired: true,
                     ),
                     const SizedBox(height: 16),
                     _buildTimePicker(),
@@ -117,6 +119,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       hint: widget.isEditMode
                           ? widget.acara!.tempatAcara.toString()
                           : 'Masukkan tempat',
+                      isRequired: true,
                     ),
                     const SizedBox(height: 16),
                     CustomTextField(
@@ -126,6 +129,7 @@ class _TambahAcaraState extends State<TambahAcara> {
                       hint: widget.isEditMode
                           ? widget.acara!.jumlahPartisipan.toString()
                           : 'Masukkan jumlah partisipan',
+                      isRequired: true,
                     ),
                   ],
                 ),

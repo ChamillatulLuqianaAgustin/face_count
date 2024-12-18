@@ -75,6 +75,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   controller: _oldPasswordController,
                   label: 'Password Lama',
                   hint: 'Masukkan password lama',
+                  isRequired: true,
                 ),
                 const SizedBox(
                   height: 16,
@@ -83,6 +84,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   controller: _newPasswordController,
                   label: 'Password Baru',
                   hint: 'Masukkan password baru',
+                  isRequired: true,
                 ),
                 const SizedBox(
                   height: 16,
