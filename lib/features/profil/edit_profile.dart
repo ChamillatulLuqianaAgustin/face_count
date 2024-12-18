@@ -110,6 +110,7 @@ class _EditProfileState extends State<EditProfile> {
                   controller: _namaController,
                   label: 'Nama',
                   hint: user?.displayName ?? 'Nama Tidak Tersedia',
+                  isRequired: true,
                 ),
                 const SizedBox(
                   height: 16,
@@ -118,6 +119,7 @@ class _EditProfileState extends State<EditProfile> {
                   controller: _emailController,
                   label: 'Email',
                   hint: user?.email ?? 'Email Tidak Tersedia',
+                  isRequired: true,
                 ),
                 const SizedBox(
                   height: 16,

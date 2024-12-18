@@ -82,18 +82,21 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: _namaController,
                         label: 'Nama',
                         hint: 'Masukkan nama',
+                        isRequired: true,
                       ),
                       const SizedBox(height: 16),
                       CustomTextField(
                         controller: _emailController,
                         label: 'Alamat Email',
                         hint: 'Masukkan alamat email',
+                        isRequired: true,
                       ),
                       const SizedBox(height: 16),
                       CustomTextField(
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Masukkan password',
+                        isRequired: true,
                         isPassword: true,
                         isPasswordVisible: _isPasswordVisible,
                         togglePasswordVisibility: () {

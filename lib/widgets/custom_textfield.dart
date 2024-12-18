@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final bool isPassword;
   final bool isPasswordVisible;
+  final bool isRequired;
   final VoidCallback? togglePasswordVisibility;
 
   const CustomTextField({
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     required this.hint,
     this.isPassword = false,
     this.isPasswordVisible = false,
+    this.isRequired = false,
     this.togglePasswordVisibility,
   });
 
@@ -27,10 +29,21 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        Row(
+          children: [
+            Text(
           label,
           style: regularTS.copyWith(fontSize: 16),
+          ),
+        if (isRequired) // Tanda merah jika field wajib diisi
+              const Text(
+                ' *',
+                style: TextStyle(color: redBase, fontSize: 16),
+              ),
+          ],
         ),
+        
+        
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,

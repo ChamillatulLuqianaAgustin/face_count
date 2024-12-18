@@ -84,6 +84,7 @@ class _ForgotPasswordState extends State<ForgotPasswordPage> {
                         controller: _emailController,
                         label: 'Alamat Email',
                         hint: 'Masukkan alamat email',
+                        isRequired: true,
                       ),
                       const SizedBox(height: 24),
 
